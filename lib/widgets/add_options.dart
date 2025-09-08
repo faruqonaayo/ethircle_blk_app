@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:ethircle_blk_app/screens/category_form_screen.dart';
 import 'package:ethircle_blk_app/screens/item_form_screen.dart';
 
 class AddOptions extends StatelessWidget {
@@ -27,7 +28,7 @@ class AddOptions extends StatelessWidget {
         _Option(
           label: "Add Category",
           icon: Icons.category_outlined,
-          page: Scaffold(),
+          page: CategoryFormScreen(),
         ),
       ],
     );

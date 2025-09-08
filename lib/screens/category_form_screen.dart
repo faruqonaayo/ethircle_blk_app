@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-import 'package:ethircle_blk_app/widgets/image_field.dart';
+class CategoryFormScreen extends StatefulWidget {
+  const CategoryFormScreen({super.key});
 
-class ItemFormScreen extends StatefulWidget {
-  const ItemFormScreen({super.key});
   @override
   State<StatefulWidget> createState() {
-    return _ItemFormScreenState();
+    return _CategoryFormScreenState();
   }
 }
 
-class _ItemFormScreenState extends State<ItemFormScreen> {
+class _CategoryFormScreenState extends State<CategoryFormScreen> {
   final _formKey = GlobalKey<FormState>();
   var _enteredName = "";
   var _enteredDescription = "";
-  var _enteredWorth = "";
-  var _enteredAddress = "";
+  Color _selectedColor = Colors.blue;
 
   void _submitForm() {
     final formState = _formKey.currentState;
@@ -24,7 +23,37 @@ class _ItemFormScreenState extends State<ItemFormScreen> {
       return;
     }
     formState.save();
-    print("valid");
+
+    // ✅ Here you can send data to Firebase or state management
+    print("Category Name: $_enteredName");
+    print("Category Description: $_enteredDescription");
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Category saved successfully!")));
+  }
+
+  void _chooseColor() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Pick a color'),
+        content: ColorPicker(
+          pickerColor: _selectedColor,
+          onColorChanged: (color) {
+            setState(() {
+              _selectedColor = color;
+            });
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Done'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -32,12 +61,12 @@ class _ItemFormScreenState extends State<ItemFormScreen> {
     var textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(title: Text("New Item")),
+      appBar: AppBar(title: const Text("New Category")),
       body: ListView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         children: [
           Text(
-            "Start Adding New Item",
+            "Creating New Category",
             style: textTheme.headlineSmall!.copyWith(
               fontWeight: FontWeight.w600,
               fontSize: 20,
@@ -50,14 +79,14 @@ class _ItemFormScreenState extends State<ItemFormScreen> {
               children: [
                 TextFormField(
                   decoration: InputDecoration(
-                    label: Text("Name"),
+                    label: const Text("Category Name"),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a name';
+                      return 'Please enter a category name';
                     }
                     return null;
                   },
@@ -68,7 +97,7 @@ class _ItemFormScreenState extends State<ItemFormScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   decoration: InputDecoration(
-                    label: Text("Description"),
+                    label: const Text("Category Description"),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -85,52 +114,37 @@ class _ItemFormScreenState extends State<ItemFormScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    label: Text("Worth"),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
+                Row(
+                  children: [
+                    Text(
+                      "Select Color: ",
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  keyboardType: TextInputType.numberWithOptions(),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a worth';
-                    }
-                    return null;
-                  },
-                  onSaved: (newValue) {
-                    _enteredWorth = newValue!;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    label: Text("Address"),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
+                    const SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: _chooseColor,
+                      child: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: _selectedColor,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
                     ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a address';
-                    }
-                    return null;
-                  },
-                  onSaved: (newValue) {
-                    _enteredAddress = newValue!;
-                  },
+                  ],
                 ),
-                const SizedBox(height: 16),
-                ImageField(),
               ],
             ),
           ),
           const SizedBox(height: 40),
           ElevatedButton.icon(
             onPressed: _submitForm,
-            label: Text("Add Item"),
-            icon: Icon(Icons.add),
+            label: const Text("Create Category"),
+            icon: const Icon(Icons.add),
           ),
         ],
       ),
