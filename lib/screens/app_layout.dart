@@ -1,3 +1,4 @@
+import 'package:ethircle_blk_app/widgets/add_options.dart';
 import 'package:flutter/material.dart';
 
 class AppLayout extends StatefulWidget {
@@ -67,7 +68,14 @@ class _AppLayoutState extends State<AppLayout> {
           if (value == 2) {
             showModalBottomSheet(
               context: context,
-              builder: (ctx) => Container(height: 160),
+              builder: (ctx) => const SizedBox(
+                height: 160,
+                width: double.infinity,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: AddOptions(),
+                ),
+              ),
             );
             return;
           }
