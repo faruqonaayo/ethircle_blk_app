@@ -28,6 +28,20 @@ class BLKApp extends StatelessWidget {
         bodyColor: colorScheme.onSurface,
         displayColor: colorScheme.onSurface,
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
+          textStyle: TextStyle(fontWeight: FontWeight.w500),
+          padding: EdgeInsets.all(16),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          textStyle: TextStyle(fontWeight: FontWeight.w500),
+          padding: EdgeInsets.all(16),
+        ),
+      ),
     );
   }
 

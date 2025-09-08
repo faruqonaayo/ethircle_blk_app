@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:ethircle_blk_app/screens/item_form_screen.dart';
+
 class AddOptions extends StatelessWidget {
   const AddOptions({super.key});
 
@@ -19,7 +21,7 @@ class AddOptions extends StatelessWidget {
         _Option(
           label: "Add Item",
           icon: Icons.emoji_objects_outlined,
-          page: Scaffold(),
+          page: ItemFormScreen(),
         ),
         const SizedBox(height: 8),
         _Option(
@@ -41,15 +43,18 @@ class _Option extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => page));
+      },
       child: Row(
         children: [
-          Icon(icon, size: 24),
+          Icon(icon, size: 24, color: colorScheme.onSurface),
           const SizedBox(width: 8),
           Text(label, style: TextStyle(fontSize: 16)),
           const Spacer(),
-          const Icon(Icons.chevron_right, size: 32),
+          Icon(Icons.chevron_right, size: 32, color: colorScheme.onSurface),
         ],
       ),
     );
