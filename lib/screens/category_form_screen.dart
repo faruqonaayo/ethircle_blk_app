@@ -6,7 +6,9 @@ import 'package:ethircle_blk_app/providers/categories_provider.dart';
 import 'package:ethircle_blk_app/models/category.dart';
 
 class CategoryFormScreen extends ConsumerStatefulWidget {
-  const CategoryFormScreen({super.key});
+  const CategoryFormScreen({super.key, this.isEditing});
+
+  final Category? isEditing;
 
   @override
   ConsumerState<CategoryFormScreen> createState() {
@@ -18,7 +20,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
   final _formKey = GlobalKey<FormState>();
   var _enteredName = "";
   var _enteredDescription = "";
-  Color _selectedColor = Colors.blue;
+  late Color _selectedColor;
 
   void _submitForm() {
     final formState = _formKey.currentState;
@@ -36,6 +38,32 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
       return;
     }
     formState.save();
+    final categoriesNotifier = ref.read(categoriesProvider.notifier);
+
+    // logic for updating a new category
+    if (widget.isEditing != null) {
+      final prevData = widget.isEditing!;
+      final updatedCat = Category(
+        id: prevData.id,
+        name: _enteredName,
+        description: _enteredDescription,
+        aValue: double.parse(_selectedColor.a.toStringAsFixed(2)),
+        rValue: (_selectedColor.r * 255).toInt(),
+        gValue: (_selectedColor.g * 255).toInt(),
+        bValue: (_selectedColor.b * 255).toInt(),
+      );
+      categoriesNotifier.editCategory(updatedCat);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Category '${prevData.name}' changed to  '${updatedCat.name}'",
+          ),
+        ),
+      );
+      // returns the new update as the screen is popped
+      Navigator.of(context).pop(updatedCat);
+      return;
+    }
 
     // creating new category object
     final newCategory = Category.create(
@@ -46,8 +74,6 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
       gValue: (_selectedColor.g * 255).toInt(),
       bValue: (_selectedColor.b * 255).toInt(),
     );
-
-    final categoriesNotifier = ref.read(categoriesProvider.notifier);
 
     categoriesNotifier.addNewCategory(newCategory);
 
@@ -80,8 +106,24 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    final isEditing = widget.isEditing;
+
+    _selectedColor = isEditing == null
+        ? Colors.blue
+        : Color.fromRGBO(
+            isEditing.rValue,
+            isEditing.gValue,
+            isEditing.bValue,
+            1,
+          );
+  }
+
+  @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
+    final isEditing = widget.isEditing;
 
     return Scaffold(
       appBar: AppBar(title: const Text("New Category")),
@@ -101,6 +143,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
             child: Column(
               children: [
                 TextFormField(
+                  initialValue: isEditing == null ? "" : isEditing.name,
                   decoration: InputDecoration(
                     label: const Text("Category Name"),
                     border: OutlineInputBorder(
@@ -119,6 +162,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  initialValue: isEditing == null ? "" : isEditing.description,
                   decoration: InputDecoration(
                     label: const Text("Category Description"),
                     border: OutlineInputBorder(

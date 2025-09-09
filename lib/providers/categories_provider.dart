@@ -12,6 +12,16 @@ class CategoriesNotifier extends StateNotifier<List<Category>> {
   void removeCategory(String catId) {
     state = state.where((cat) => cat.id != catId).toList();
   }
+
+  void editCategory(Category editedCategory) {
+    state = state.map((cat) {
+      if (cat.id == editedCategory.id) {
+        return editedCategory;
+      } else {
+        return cat;
+      }
+    }).toList();
+  }
 }
 
 final categoriesProvider = StateNotifierProvider((ref) => CategoriesNotifier());
