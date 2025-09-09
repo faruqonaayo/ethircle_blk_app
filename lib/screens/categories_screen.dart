@@ -24,12 +24,13 @@ class CategoriesScreen extends ConsumerWidget {
         const SizedBox(height: 32),
         categories.isEmpty
             ? Center(child: Text("No categories yet!"))
-            : ListView.builder(
+            : ListView.separated(
                 primary: false,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: categories.length,
                 itemBuilder: (ctx, index) => CategoryCard(categories[index]),
+                separatorBuilder: (context, index) => SizedBox(height: 8),
               ),
       ],
     );
