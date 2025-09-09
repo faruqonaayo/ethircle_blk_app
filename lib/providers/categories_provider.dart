@@ -8,6 +8,10 @@ class CategoriesNotifier extends StateNotifier<List<Category>> {
   void addNewCategory(Category cat) {
     state = [...state, cat];
   }
+
+  void removeCategory(String catId) {
+    state = state.where((cat) => cat.id != catId).toList();
+  }
 }
 
 final categoriesProvider = StateNotifierProvider((ref) => CategoriesNotifier());
