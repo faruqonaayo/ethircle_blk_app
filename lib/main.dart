@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-
-import 'package:ethircle_blk_app/screens/app_layout.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:ethircle_blk_app/providers/app_mode_provider.dart';
+import 'package:ethircle_blk_app/screens/app_layout.dart';
 
 void main() {
-  runApp(const BLKApp());
+  runApp(const ProviderScope(child: BLKApp()));
 }
 
 var kColorScheme = ColorScheme.fromSeed(
@@ -17,7 +19,7 @@ var kDarkColorScheme = ColorScheme.fromSeed(
   brightness: Brightness.dark,
 );
 
-class BLKApp extends StatelessWidget {
+class BLKApp extends ConsumerWidget {
   const BLKApp({super.key});
 
   ThemeData getAppThemeData(ColorScheme colorScheme) {
@@ -46,10 +48,12 @@ class BLKApp extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appMode = ref.watch(appModeProvider);
+
     return MaterialApp(
       title: 'Ethircle BLK Application',
-      themeMode: ThemeMode.light,
+      themeMode: appMode,
       theme: getAppThemeData(kColorScheme),
       darkTheme: getAppThemeData(kDarkColorScheme),
       home: AppLayout(),

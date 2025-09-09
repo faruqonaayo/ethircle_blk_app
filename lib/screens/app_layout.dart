@@ -1,4 +1,5 @@
 import 'package:ethircle_blk_app/widgets/add_options.dart';
+import 'package:ethircle_blk_app/widgets/app_mode_button.dart';
 import 'package:flutter/material.dart';
 
 class AppLayout extends StatefulWidget {
@@ -25,7 +26,7 @@ class _AppLayoutState extends State<AppLayout> {
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(actions: [AppModeButton()]),
       body: IndexedStack(index: _currentPage, children: _pages),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
