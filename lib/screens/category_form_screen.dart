@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CategoryFormScreen extends StatefulWidget {
+import 'package:ethircle_blk_app/providers/categories_provider.dart';
+import 'package:ethircle_blk_app/models/category.dart';
+
+class CategoryFormScreen extends ConsumerStatefulWidget {
   const CategoryFormScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<CategoryFormScreen> createState() {
     return _CategoryFormScreenState();
   }
 }
 
-class _CategoryFormScreenState extends State<CategoryFormScreen> {
+class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
   final _formKey = GlobalKey<FormState>();
   var _enteredName = "";
   var _enteredDescription = "";
@@ -20,17 +24,36 @@ class _CategoryFormScreenState extends State<CategoryFormScreen> {
     final formState = _formKey.currentState;
 
     if (!formState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Complete all fields",
+            style: TextStyle(color: Theme.of(context).colorScheme.onError),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
       return;
     }
     formState.save();
 
-    // ✅ Here you can send data to Firebase or state management
-    print("Category Name: $_enteredName");
-    print("Category Description: $_enteredDescription");
+    // creating new category object
+    final newCategory = Category.create(
+      name: _enteredName,
+      description: _enteredDescription,
+      aValue: double.parse(_selectedColor.a.toStringAsFixed(2)),
+      rValue: (_selectedColor.r * 255).toInt(),
+      gValue: (_selectedColor.g * 255).toInt(),
+      bValue: (_selectedColor.b * 255).toInt(),
+    );
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Category saved successfully!")));
+    final categoriesNotifier = ref.read(categoriesProvider.notifier);
+
+    categoriesNotifier.addNewCategory(newCategory);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Category '$_enteredName' saved successfully!")),
+    );
   }
 
   void _chooseColor() {

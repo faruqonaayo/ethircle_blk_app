@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
+
+import 'package:ethircle_blk_app/screens/categories_screen.dart';
 import 'package:ethircle_blk_app/widgets/add_options.dart';
 import 'package:ethircle_blk_app/widgets/app_mode_button.dart';
-import 'package:flutter/material.dart';
 
 class AppLayout extends StatefulWidget {
   const AppLayout({super.key});
@@ -16,7 +18,7 @@ class _AppLayoutState extends State<AppLayout> {
 
   final _pages = const [
     Text("Home"),
-    Text("Categories"),
+    CategoriesScreen(),
     Text("Add Data"),
     Text("Favorites"),
     Text("Profile"),
