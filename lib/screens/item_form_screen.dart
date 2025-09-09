@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/providers/categories_provider.dart';
 import 'package:ethircle_blk_app/widgets/image_field.dart';
+import 'package:ethircle_blk_app/models/category.dart';
+import 'package:ethircle_blk_app/models/item.dart';
+import 'package:ethircle_blk_app/providers/items_provider.dart';
 
-class ItemFormScreen extends StatefulWidget {
+class ItemFormScreen extends ConsumerStatefulWidget {
   const ItemFormScreen({super.key});
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<ItemFormScreen> createState() {
     return _ItemFormScreenState();
   }
 }
 
-class _ItemFormScreenState extends State<ItemFormScreen> {
+class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   final _formKey = GlobalKey<FormState>();
   var _enteredName = "";
   var _enteredDescription = "";
   var _enteredWorth = "";
   var _enteredAddress = "";
+  Category? _selectedCategory;
 
   void _submitForm() {
     final formState = _formKey.currentState;
@@ -24,12 +30,29 @@ class _ItemFormScreenState extends State<ItemFormScreen> {
       return;
     }
     formState.save();
-    print("valid");
+    // creating new item
+    final newItem = Item.create(
+      name: _enteredName,
+      description: _enteredDescription,
+      worth: double.parse(_enteredWorth),
+      address: _enteredAddress,
+      imageUrl: "hello",
+      catId: _selectedCategory!.id,
+    );
+
+    final itemsNotifier = ref.read(itemsProvider.notifier);
+
+    itemsNotifier.addNewItem(newItem);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Item '$_enteredName' saved successfully!")),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
+    final categories = ref.watch(categoriesProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text("New Item")),
@@ -123,6 +146,31 @@ class _ItemFormScreenState extends State<ItemFormScreen> {
                 ),
                 const SizedBox(height: 16),
                 ImageField(),
+                const SizedBox(height: 16),
+                categories.isNotEmpty
+                    ? DropdownMenu(
+                        label: Text("Categories"),
+                        inputDecorationTheme: InputDecorationTheme(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        width: double.infinity,
+                        onSelected: (value) {
+                          setState(() {
+                            _selectedCategory = value;
+                          });
+                        },
+                        dropdownMenuEntries: categories
+                            .map(
+                              (cat) => DropdownMenuEntry(
+                                value: cat,
+                                label: cat.name,
+                              ),
+                            )
+                            .toList(),
+                      )
+                    : Text("No category"),
               ],
             ),
           ),

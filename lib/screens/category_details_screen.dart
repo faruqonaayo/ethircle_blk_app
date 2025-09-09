@@ -1,17 +1,22 @@
-import 'package:ethircle_blk_app/models/category.dart';
-import 'package:ethircle_blk_app/screens/category_form_screen.dart';
+import 'package:ethircle_blk_app/providers/items_provider.dart';
+import 'package:ethircle_blk_app/widgets/item_card.dart';
 import 'package:flutter/material.dart';
 
-class CategoryDetailsScreen extends StatefulWidget {
+import 'package:ethircle_blk_app/models/category.dart';
+import 'package:ethircle_blk_app/screens/category_form_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class CategoryDetailsScreen extends ConsumerStatefulWidget {
   const CategoryDetailsScreen(this.category, {super.key});
 
   final Category category;
 
   @override
-  State<CategoryDetailsScreen> createState() => _CategoryDetailsScreenState();
+  ConsumerState<CategoryDetailsScreen> createState() =>
+      _CategoryDetailsScreenState();
 }
 
-class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
+class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
   late Category _category;
   @override
   void initState() {
@@ -21,9 +26,16 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final items = ref.watch(itemsProvider);
+    final categoryItems = items
+        .where((item) => item.catId == _category.id)
+        .toList();
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    print(categoryItems.length);
     return Scaffold(
       appBar: AppBar(
-        title: Text(_category.name),
         actions: [
           IconButton(
             onPressed: () async {
@@ -48,7 +60,49 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
           0.4,
         ),
       ),
-      body: Text("Hello ${_category.name}"),
+      body: ListView(
+        padding: EdgeInsets.all(24),
+        children: [
+          Text(
+            _category.name,
+            style: textTheme.headlineMedium!.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            _category.description,
+            style: textTheme.bodyLarge!.copyWith(
+              color: colorScheme.secondary,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          const SizedBox(height: 32),
+          Text(
+            "Category Items",
+            style: textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          categoryItems.isEmpty
+              ? Text("No items yet!")
+              : GridView.builder(
+                  primary: false,
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    mainAxisExtent: 220,
+                  ),
+                  itemCount: categoryItems.length,
+                  itemBuilder: (ctx, index) {
+                    final currentItem = categoryItems[index];
+                    return ItemCard(category: _category, item: currentItem);
+                  },
+                ),
+        ],
+      ),
     );
   }
 }
