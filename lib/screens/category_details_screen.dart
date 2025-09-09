@@ -91,9 +91,9 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
                   shrinkWrap: true,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    mainAxisExtent: 220,
+                    crossAxisSpacing: 4,
+                    mainAxisSpacing: 8,
+                    mainAxisExtent: 240,
                   ),
                   itemCount: categoryItems.length,
                   itemBuilder: (ctx, index) {

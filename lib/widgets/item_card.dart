@@ -100,7 +100,9 @@ class ItemCard extends ConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  item.name,
+                  item.name.length > 10
+                      ? "${item.name.substring(0, 10)}..."
+                      : item.name,
                   style: textTheme.headlineSmall!.copyWith(
                     color: colorScheme.primary,
                     fontSize: 18,
