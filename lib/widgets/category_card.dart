@@ -1,3 +1,4 @@
+import 'package:ethircle_blk_app/screens/category_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -76,7 +77,13 @@ class CategoryCard extends ConsumerWidget {
             category.bValue,
             0.32,
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) => CategoryDetailsScreen(category),
+              ),
+            );
+          },
           borderRadius: BorderRadius.circular(16),
           child: Container(
             padding: EdgeInsets.all(24),
