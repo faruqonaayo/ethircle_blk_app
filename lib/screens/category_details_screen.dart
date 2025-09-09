@@ -1,10 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:ethircle_blk_app/providers/items_provider.dart';
 import 'package:ethircle_blk_app/widgets/item_card.dart';
-import 'package:flutter/material.dart';
-
 import 'package:ethircle_blk_app/models/category.dart';
 import 'package:ethircle_blk_app/screens/category_form_screen.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CategoryDetailsScreen extends ConsumerStatefulWidget {
   const CategoryDetailsScreen(this.category, {super.key});

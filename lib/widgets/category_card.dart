@@ -1,7 +1,7 @@
-import 'package:ethircle_blk_app/screens/category_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/screens/category_details_screen.dart';
 import 'package:ethircle_blk_app/providers/categories_provider.dart';
 import 'package:ethircle_blk_app/models/category.dart';
 
@@ -15,7 +15,7 @@ class CategoryCard extends ConsumerWidget {
     final categoriesNotifier = ref.read(categoriesProvider.notifier);
     final textTheme = Theme.of(context).textTheme;
 
-    // this function helps to prevent users from making category delition mistake
+    // this function helps to prevent users from making category deletion by mistake
     Future<bool?> showDeletionAlert() async {
       return showDialog<bool>(
         context: context,
