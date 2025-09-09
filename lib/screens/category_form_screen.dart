@@ -76,6 +76,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
     );
 
     categoriesNotifier.addNewCategory(newCategory);
+    formState.reset();
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Category '$_enteredName' saved successfully!")),
@@ -85,22 +86,24 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
   void _chooseColor() {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Pick a color'),
-        content: ColorPicker(
-          pickerColor: _selectedColor,
-          onColorChanged: (color) {
-            setState(() {
-              _selectedColor = color;
-            });
-          },
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Done'),
+      builder: (ctx) => SingleChildScrollView(
+        child: AlertDialog(
+          title: const Text('Pick a color'),
+          content: ColorPicker(
+            pickerColor: _selectedColor,
+            onColorChanged: (color) {
+              setState(() {
+                _selectedColor = color;
+              });
+            },
           ),
-        ],
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('Done'),
+            ),
+          ],
+        ),
       ),
     );
   }
