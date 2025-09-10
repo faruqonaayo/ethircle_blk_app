@@ -11,6 +11,8 @@ class Category {
     required this.rValue,
     required this.gValue,
     required this.bValue,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   Category.create({
@@ -20,7 +22,9 @@ class Category {
     required this.rValue,
     required this.gValue,
     required this.bValue,
-  }) : id = uuid.v4();
+  }) : id = uuid.v4(),
+       createdAt = DateTime.now(),
+       updatedAt = DateTime.now();
 
   final String id;
   final String name;
@@ -29,4 +33,6 @@ class Category {
   final int rValue;
   final int gValue;
   final int bValue;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 }

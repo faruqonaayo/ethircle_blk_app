@@ -51,6 +51,8 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
         rValue: (_selectedColor.r * 255).toInt(),
         gValue: (_selectedColor.g * 255).toInt(),
         bValue: (_selectedColor.b * 255).toInt(),
+        createdAt: prevData.createdAt,
+        updatedAt: DateTime.now(),
       );
       categoriesNotifier.editCategory(updatedCat);
       ScaffoldMessenger.of(context).showSnackBar(

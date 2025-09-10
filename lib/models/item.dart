@@ -12,6 +12,8 @@ class Item {
     required this.imageUrl,
     required this.catId,
     required this.isFavorite,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   Item.create({
@@ -22,7 +24,9 @@ class Item {
     required this.imageUrl,
     required this.catId,
   }) : id = uuid.v4(),
-       isFavorite = false;
+       isFavorite = false,
+       createdAt = DateTime.now(),
+       updatedAt = DateTime.now();
 
   final String id;
   final String name;
@@ -32,4 +36,6 @@ class Item {
   final String imageUrl;
   final String catId;
   bool isFavorite;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 }

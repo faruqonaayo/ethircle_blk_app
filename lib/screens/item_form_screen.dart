@@ -45,6 +45,8 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         imageUrl: "hello",
         catId: _selectedCategory!.id,
         isFavorite: prevData.isFavorite,
+        createdAt: prevData.createdAt,
+        updatedAt: DateTime.now(),
       );
 
       itemsNotifier.editItem(updatedItem);
