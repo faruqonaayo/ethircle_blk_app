@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -105,7 +107,13 @@ class ItemCard extends ConsumerWidget {
                   alignment: Alignment.center,
                   child: ClipRRect(
                     borderRadius: BorderRadiusGeometry.circular(40),
-                    child: Image.asset("assets/fan.jpg", width: 80, height: 80),
+                    child: item.imageUrl == ""
+                        ? Image.asset("assets/demo.jpg", width: 80, height: 80)
+                        : Image.file(
+                            File(item.imageUrl),
+                            width: 80,
+                            height: 80,
+                          ),
                   ),
                 ),
                 const SizedBox(height: 8),

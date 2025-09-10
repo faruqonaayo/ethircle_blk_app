@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart' as syspath;
+
 import 'package:ethircle_blk_app/models/item.dart';
 import 'package:ethircle_blk_app/services/db_services.dart';
 
@@ -41,5 +45,16 @@ class ItemServices {
   static void deleteItem(String itemId) async {
     final db = await DbServices.db;
     await db.delete("item", where: "id = ?", whereArgs: [itemId]);
+  }
+
+  static Future<String> saveImage(File image) async {
+    final appDir = await syspath.getApplicationDocumentsDirectory();
+    final extension = image.path.split(".").last;
+
+    final imagePath =
+        "${appDir.path}/${DateTime.now().microsecondsSinceEpoch.toString()}.$extension";
+
+    final savedImage = await image.copy(imagePath);
+    return savedImage.path;
   }
 }

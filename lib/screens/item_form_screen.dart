@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,27 +27,40 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   var _enteredWorth = "";
   var _enteredAddress = "";
   Category? _selectedCategory;
+  File? _selectedImage;
 
-  void _submitForm() {
+  void _submitForm() async {
     final formState = _formKey.currentState;
 
     if (!formState!.validate()) {
       return;
     }
 
-    print(_selectedCategory?.id);
     formState.save();
     final itemsNotifier = ref.read(itemsProvider.notifier);
+
+    // checking if any new immage was updated
+    String imagePath = "";
+    if (_selectedImage != null) {
+      imagePath = await ItemServices.saveImage(_selectedImage!);
+    }
+
     // logic to update data
     if (widget.isEditing != null) {
       final prevData = widget.isEditing!;
+
+      // deleting previous image if it exists
+      if (imagePath != "" && prevData.imageUrl != "") {
+        await File(prevData.imageUrl).delete();
+      }
+
       final updatedItem = Item(
         id: prevData.id,
         name: _enteredName,
         description: _enteredDescription,
         worth: double.parse(_enteredWorth),
         address: _enteredAddress,
-        imageUrl: "hello",
+        imageUrl: imagePath == "" ? prevData.imageUrl : imagePath,
         catId: _selectedCategory?.id,
         isFavorite: prevData.isFavorite,
         createdAt: prevData.createdAt,
@@ -54,6 +69,10 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
 
       itemsNotifier.editItem(updatedItem);
       ItemServices.updateItem(prevData.id, updatedItem);
+
+      if (!mounted) {
+        return;
+      }
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -73,13 +92,17 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       description: _enteredDescription,
       worth: double.parse(_enteredWorth),
       address: _enteredAddress,
-      imageUrl: "hello",
-      catId: _selectedCategory!.id,
+      imageUrl: imagePath,
+      catId: _selectedCategory?.id,
     );
 
     itemsNotifier.addNewItem(newItem);
     ItemServices.addItem(newItem);
     formState.reset();
+
+    if (!mounted) {
+      return;
+    }
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Item '$_enteredName' saved successfully!")),
@@ -191,7 +214,13 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                ImageField(),
+                ImageField(
+                  onSelectImage: (image) {
+                    setState(() {
+                      _selectedImage = image;
+                    });
+                  },
+                ),
                 const SizedBox(height: 16),
                 categories.isNotEmpty
                     ? DropdownMenuFormField(
@@ -226,8 +255,8 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
           const SizedBox(height: 40),
           ElevatedButton.icon(
             onPressed: _submitForm,
-            label: Text("Add Item"),
-            icon: Icon(Icons.add),
+            label: Text(isEditing == null ? "Add Item" : "Update Item"),
+            icon: Icon(isEditing == null ? Icons.add : Icons.edit),
           ),
         ],
       ),

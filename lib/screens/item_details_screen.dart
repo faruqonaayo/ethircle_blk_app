@@ -1,7 +1,9 @@
-import 'package:ethircle_blk_app/services/item_services.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/services/item_services.dart';
 import 'package:ethircle_blk_app/providers/items_provider.dart';
 import 'package:ethircle_blk_app/models/item.dart';
 import 'package:ethircle_blk_app/screens/item_form_screen.dart';
@@ -59,12 +61,18 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
         flexibleSpace: SizedBox(
           child: Stack(
             children: [
-              Image.asset(
-                "assets/fan.jpg",
-                width: double.infinity,
-                fit: BoxFit.cover,
-                alignment: Alignment.center,
-              ),
+              _item.imageUrl == ""
+                  ? Image.asset(
+                      "assets/demo.jpg",
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.file(
+                      File(_item.imageUrl),
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                    ),
               Container(
                 width: double.infinity,
                 height: double.infinity,

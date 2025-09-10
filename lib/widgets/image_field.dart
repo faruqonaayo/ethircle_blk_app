@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageField extends StatefulWidget {
-  const ImageField({super.key});
+  const ImageField({super.key, required this.onSelectImage});
+  final Function(File image) onSelectImage;
+
   @override
   State<StatefulWidget> createState() {
     return _ImageFieldState();
@@ -27,6 +29,7 @@ class _ImageFieldState extends State<ImageField> {
     setState(() {
       _pickedImage = File(piture.path);
     });
+    widget.onSelectImage(_pickedImage!);
   }
 
   void _useGallery() async {
@@ -42,6 +45,7 @@ class _ImageFieldState extends State<ImageField> {
     setState(() {
       _pickedImage = File(piture.path);
     });
+    widget.onSelectImage(_pickedImage!);
   }
 
   @override
