@@ -1,6 +1,6 @@
-import 'package:ethircle_blk_app/screens/favorite_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'package:ethircle_blk_app/screens/favorite_screen.dart';
 import 'package:ethircle_blk_app/screens/categories_screen.dart';
 import 'package:ethircle_blk_app/widgets/add_options.dart';
 import 'package:ethircle_blk_app/widgets/app_mode_button.dart';

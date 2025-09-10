@@ -1,7 +1,8 @@
-import 'package:ethircle_blk_app/providers/items_provider.dart';
-import 'package:ethircle_blk_app/widgets/item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:ethircle_blk_app/providers/items_provider.dart';
+import 'package:ethircle_blk_app/widgets/item_card.dart';
 
 class FavoriteScreen extends ConsumerWidget {
   const FavoriteScreen({super.key});

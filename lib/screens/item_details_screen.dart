@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:ethircle_blk_app/providers/items_provider.dart';
 import 'package:ethircle_blk_app/models/item.dart';
 import 'package:ethircle_blk_app/screens/item_form_screen.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ItemDetailsScreen extends ConsumerStatefulWidget {
   const ItemDetailsScreen(this.item, {super.key});
