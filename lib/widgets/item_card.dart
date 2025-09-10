@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/screens/item_details_screen.dart';
 import 'package:ethircle_blk_app/providers/items_provider.dart';
 import 'package:ethircle_blk_app/models/category.dart';
 import 'package:ethircle_blk_app/models/item.dart';
@@ -78,7 +79,11 @@ class ItemCard extends ConsumerWidget {
           borderRadius: BorderRadiusGeometry.circular(16),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (ctx) => ItemDetailsScreen(item)),
+            );
+          },
           borderRadius: BorderRadius.circular(16),
           splashColor: Color.fromRGBO(
             category.rValue,

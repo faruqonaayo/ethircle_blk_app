@@ -36,6 +36,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
     print(categoryItems.length);
     return Scaffold(
       appBar: AppBar(
+        title: Text("Category Details"),
         actions: [
           IconButton(
             onPressed: () async {
