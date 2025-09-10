@@ -109,6 +109,18 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                         _item.isFavorite = !_item.isFavorite;
                       });
                       itemsNotifier.setFavorite(_item.id, _item.isFavorite);
+
+                      ScaffoldMessenger.of(context).clearSnackBars();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            _item.isFavorite
+                                ? 'Added to favorites'
+                                : 'Removed from favorites',
+                          ),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
                     },
                     icon: Icon(
                       _item.isFavorite

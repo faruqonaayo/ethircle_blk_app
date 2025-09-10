@@ -1,3 +1,4 @@
+import 'package:ethircle_blk_app/screens/favorite_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ethircle_blk_app/screens/categories_screen.dart';
@@ -20,7 +21,7 @@ class _AppLayoutState extends State<AppLayout> {
     Text("Home"),
     CategoriesScreen(),
     Text("Add Data"),
-    Text("Favorites"),
+    FavoriteScreen(),
     Text("Profile"),
   ];
 

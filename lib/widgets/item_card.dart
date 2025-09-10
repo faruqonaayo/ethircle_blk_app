@@ -7,10 +7,10 @@ import 'package:ethircle_blk_app/models/category.dart';
 import 'package:ethircle_blk_app/models/item.dart';
 
 class ItemCard extends ConsumerWidget {
-  const ItemCard({super.key, required this.category, required this.item});
+  const ItemCard({super.key, this.category, required this.item});
 
   final Item item;
-  final Category category;
+  final Category? category;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,6 +29,7 @@ class ItemCard extends ConsumerWidget {
             IconButton(
               onPressed: () {
                 itemsNotifier.removeItem(item.id);
+                ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("${item.name} deleted successfully")),
                 );
@@ -85,12 +86,14 @@ class ItemCard extends ConsumerWidget {
             );
           },
           borderRadius: BorderRadius.circular(16),
-          splashColor: Color.fromRGBO(
-            category.rValue,
-            category.gValue,
-            category.bValue,
-            0.1,
-          ),
+          splashColor: category == null
+              ? colorScheme.primary.withValues(alpha: 0.1)
+              : Color.fromRGBO(
+                  category!.rValue,
+                  category!.gValue,
+                  category!.bValue,
+                  0.1,
+                ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(

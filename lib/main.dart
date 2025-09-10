@@ -44,6 +44,13 @@ class BLKApp extends ConsumerWidget {
           padding: EdgeInsets.all(16),
         ),
       ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: colorScheme.primary,
+        contentTextStyle: TextStyle(
+          color: colorScheme.onPrimary,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
     );
   }
 
