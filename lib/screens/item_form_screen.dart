@@ -72,6 +72,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     );
 
     itemsNotifier.addNewItem(newItem);
+    formState.reset();
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Item '$_enteredName' saved successfully!")),
