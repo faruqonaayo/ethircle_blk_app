@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/services/category_services.dart';
 import 'package:ethircle_blk_app/screens/category_details_screen.dart';
 import 'package:ethircle_blk_app/providers/categories_provider.dart';
 import 'package:ethircle_blk_app/models/category.dart';
@@ -26,6 +27,7 @@ class CategoryCard extends ConsumerWidget {
             IconButton(
               onPressed: () {
                 categoriesNotifier.removeCategory(category.id);
+                CategoryServices.deleteCategory(category.id);
                 ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

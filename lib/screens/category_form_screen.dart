@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/services/category_services.dart';
 import 'package:ethircle_blk_app/providers/categories_provider.dart';
 import 'package:ethircle_blk_app/models/category.dart';
 
@@ -29,7 +30,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            "Complete all fields",
+            "Complete necessary fields",
             style: TextStyle(color: Theme.of(context).colorScheme.onError),
           ),
           backgroundColor: Theme.of(context).colorScheme.error,
@@ -55,6 +56,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
         updatedAt: DateTime.now(),
       );
       categoriesNotifier.editCategory(updatedCat);
+      CategoryServices.updateCategory(prevData.id, updatedCat);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -78,6 +80,9 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
     );
 
     categoriesNotifier.addNewCategory(newCategory);
+
+    CategoryServices.addCategory(newCategory);
+
     formState.reset();
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -175,12 +180,6 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                     ),
                   ),
                   maxLines: 3,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a description';
-                    }
-                    return null;
-                  },
                   onSaved: (newValue) {
                     _enteredDescription = newValue!;
                   },
@@ -215,8 +214,10 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
           const SizedBox(height: 40),
           ElevatedButton.icon(
             onPressed: _submitForm,
-            label: const Text("Create Category"),
-            icon: const Icon(Icons.add),
+            label: Text(
+              isEditing == null ? "Create Category" : "Update Category",
+            ),
+            icon: Icon(isEditing == null ? Icons.add : Icons.edit),
           ),
         ],
       ),
