@@ -84,7 +84,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
           ),
           const SizedBox(height: 16),
           categoryItems.isEmpty
-              ? Text("No items yet!")
+              ? Center(child: Text("No items yet!"))
               : GridView.builder(
                   primary: false,
                   physics: NeverScrollableScrollPhysics(),
