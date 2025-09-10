@@ -22,6 +22,15 @@ class ItemsNotifier extends StateNotifier<List<Item>> {
       }
     }).toList();
   }
+
+  void setFavorite(String itemId, bool value) {
+    state = state.map((item) {
+      if (item.id == itemId) {
+        item.isFavorite = value;
+      }
+      return item;
+    }).toList();
+  }
 }
 
 final itemsProvider = StateNotifierProvider((ref) => ItemsNotifier());

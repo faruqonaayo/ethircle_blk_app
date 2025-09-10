@@ -8,7 +8,9 @@ import 'package:ethircle_blk_app/models/item.dart';
 import 'package:ethircle_blk_app/providers/items_provider.dart';
 
 class ItemFormScreen extends ConsumerStatefulWidget {
-  const ItemFormScreen({super.key});
+  const ItemFormScreen({super.key, this.isEditing});
+
+  final Item? isEditing;
   @override
   ConsumerState<ItemFormScreen> createState() {
     return _ItemFormScreenState();
@@ -30,6 +32,35 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       return;
     }
     formState.save();
+    final itemsNotifier = ref.read(itemsProvider.notifier);
+    // logic to update data
+    if (widget.isEditing != null) {
+      final prevData = widget.isEditing!;
+      final updatedItem = Item(
+        id: prevData.id,
+        name: _enteredName,
+        description: _enteredDescription,
+        worth: double.parse(_enteredWorth),
+        address: _enteredAddress,
+        imageUrl: "hello",
+        catId: _selectedCategory!.id,
+        isFavorite: prevData.isFavorite,
+      );
+
+      itemsNotifier.editItem(updatedItem);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Item '${prevData.name}' changed to  '${updatedItem.name}'",
+          ),
+        ),
+      );
+      // returns the new update as the screen is popped
+      Navigator.of(context).pop(updatedItem);
+      return;
+    }
+
     // creating new item
     final newItem = Item.create(
       name: _enteredName,
@@ -39,8 +70,6 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       imageUrl: "hello",
       catId: _selectedCategory!.id,
     );
-
-    final itemsNotifier = ref.read(itemsProvider.notifier);
 
     itemsNotifier.addNewItem(newItem);
 
@@ -53,6 +82,15 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
     final categories = ref.watch(categoriesProvider);
+    final isEditing = widget.isEditing;
+
+    if (isEditing != null) {
+      setState(() {
+        _selectedCategory = categories.firstWhere(
+          (cat) => cat.id == isEditing.catId,
+        );
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(title: Text("New Item")),
@@ -72,6 +110,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
             child: Column(
               children: [
                 TextFormField(
+                  initialValue: isEditing == null ? "" : isEditing.name,
                   decoration: InputDecoration(
                     label: Text("Name"),
                     border: OutlineInputBorder(
@@ -90,6 +129,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  initialValue: isEditing == null ? "" : isEditing.description,
                   decoration: InputDecoration(
                     label: Text("Description"),
                     border: OutlineInputBorder(
@@ -109,6 +149,9 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  initialValue: isEditing == null
+                      ? ""
+                      : isEditing.worth.toString(),
                   decoration: InputDecoration(
                     label: Text("Worth"),
                     border: OutlineInputBorder(
@@ -128,6 +171,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  initialValue: isEditing == null ? "" : isEditing.address,
                   decoration: InputDecoration(
                     label: Text("Address"),
                     border: OutlineInputBorder(
@@ -148,7 +192,10 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 ImageField(),
                 const SizedBox(height: 16),
                 categories.isNotEmpty
-                    ? DropdownMenu(
+                    ? DropdownMenuFormField(
+                        initialSelection: isEditing != null
+                            ? _selectedCategory
+                            : null,
                         label: Text("Categories"),
                         inputDecorationTheme: InputDecorationTheme(
                           border: OutlineInputBorder(

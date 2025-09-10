@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
 
+import 'package:ethircle_blk_app/providers/items_provider.dart';
 import 'package:ethircle_blk_app/models/item.dart';
 import 'package:ethircle_blk_app/screens/item_form_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ItemDetailsScreen extends StatelessWidget {
+class ItemDetailsScreen extends ConsumerStatefulWidget {
   const ItemDetailsScreen(this.item, {super.key});
 
   final Item item;
 
   @override
+  ConsumerState<ItemDetailsScreen> createState() => _ItemDetailsScreenState();
+}
+
+class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
+  late Item _item;
+
+  @override
+  void initState() {
+    super.initState();
+    _item = widget.item;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
+    final itemsNotifier = ref.read(itemsProvider.notifier);
 
     Widget createAppBar() {
       return SliverAppBar(
@@ -22,10 +38,20 @@ class ItemDetailsScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit, color: Colors.white),
-            onPressed: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: ((ctx) => ItemFormScreen())));
+            onPressed: () async {
+              // obtaining the result of the update
+              final result = await Navigator.of(context).push<Item>(
+                MaterialPageRoute(
+                  builder: ((ctx) => ItemFormScreen(isEditing: _item)),
+                ),
+              );
+
+              // seetting the result of the update to the new value
+              if (result != null) {
+                setState(() {
+                  _item = result;
+                });
+              }
             },
           ),
         ],
@@ -70,19 +96,33 @@ class ItemDetailsScreen extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    item.name,
+                    _item.name,
                     style: textTheme.headlineSmall!.copyWith(
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1,
                     ),
                   ),
                   const Spacer(),
-                  Icon(Icons.favorite, color: Colors.red, size: 32),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _item.isFavorite = !_item.isFavorite;
+                      });
+                      itemsNotifier.setFavorite(_item.id, _item.isFavorite);
+                    },
+                    icon: Icon(
+                      _item.isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_outline,
+                      color: Colors.red,
+                      size: 32,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 4),
               Text(
-                "\$${item.worth}",
+                "\$${_item.worth}",
                 style: textTheme.bodyLarge!.copyWith(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1,
@@ -103,7 +143,7 @@ class ItemDetailsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                item.description,
+                _item.description,
                 style: textTheme.bodySmall!.copyWith(
                   fontWeight: FontWeight.w500,
                   color: colorScheme.secondary,
@@ -113,14 +153,14 @@ class ItemDetailsScreen extends StatelessWidget {
               const SizedBox(height: 24),
               Text(
                 "Address",
-                style: textTheme.titleMedium!.copyWith(
+                style: textTheme.titleSmall!.copyWith(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                item.address,
+                _item.address,
                 style: textTheme.bodySmall!.copyWith(
                   fontWeight: FontWeight.w500,
                   color: colorScheme.secondary,

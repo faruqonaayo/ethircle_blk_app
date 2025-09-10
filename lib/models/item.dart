@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 final uuid = Uuid();
 
 class Item {
-  const Item({
+  Item({
     required this.id,
     required this.name,
     required this.description,
@@ -11,6 +11,7 @@ class Item {
     required this.address,
     required this.imageUrl,
     required this.catId,
+    required this.isFavorite,
   });
 
   Item.create({
@@ -20,7 +21,8 @@ class Item {
     required this.address,
     required this.imageUrl,
     required this.catId,
-  }) : id = uuid.v4();
+  }) : id = uuid.v4(),
+       isFavorite = false;
 
   final String id;
   final String name;
@@ -29,4 +31,5 @@ class Item {
   final String address;
   final String imageUrl;
   final String catId;
+  bool isFavorite;
 }

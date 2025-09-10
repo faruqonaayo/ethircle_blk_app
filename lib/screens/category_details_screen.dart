@@ -33,7 +33,6 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    print(categoryItems.length);
     return Scaffold(
       appBar: AppBar(
         title: Text("Category Details"),
@@ -46,7 +45,7 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
                   builder: (ctx) => CategoryFormScreen(isEditing: _category),
                 ),
               );
-              // seetting the result oft the update to the new value
+              // seetting the result of the update to the new value
               setState(() {
                 _category = result!;
               });
