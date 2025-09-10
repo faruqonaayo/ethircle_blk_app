@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/services/item_services.dart';
 import 'package:ethircle_blk_app/providers/categories_provider.dart';
 import 'package:ethircle_blk_app/widgets/image_field.dart';
 import 'package:ethircle_blk_app/models/category.dart';
@@ -31,6 +32,8 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     if (!formState!.validate()) {
       return;
     }
+
+    print(_selectedCategory?.id);
     formState.save();
     final itemsNotifier = ref.read(itemsProvider.notifier);
     // logic to update data
@@ -43,13 +46,14 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         worth: double.parse(_enteredWorth),
         address: _enteredAddress,
         imageUrl: "hello",
-        catId: _selectedCategory!.id,
+        catId: _selectedCategory?.id,
         isFavorite: prevData.isFavorite,
         createdAt: prevData.createdAt,
         updatedAt: DateTime.now(),
       );
 
       itemsNotifier.editItem(updatedItem);
+      ItemServices.updateItem(prevData.id, updatedItem);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -74,6 +78,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     );
 
     itemsNotifier.addNewItem(newItem);
+    ItemServices.addItem(newItem);
     formState.reset();
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -140,12 +145,6 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                     ),
                   ),
                   maxLines: 3,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a description';
-                    }
-                    return null;
-                  },
                   onSaved: (newValue) {
                     _enteredDescription = newValue!;
                   },
@@ -206,19 +205,19 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                           ),
                         ),
                         width: double.infinity,
-                        onSelected: (value) {
+                        onSaved: (newValue) {
                           setState(() {
-                            _selectedCategory = value;
+                            _selectedCategory = newValue;
                           });
                         },
-                        dropdownMenuEntries: categories
-                            .map(
-                              (cat) => DropdownMenuEntry(
-                                value: cat,
-                                label: cat.name,
-                              ),
-                            )
-                            .toList(),
+
+                        dropdownMenuEntries: [
+                          DropdownMenuEntry(value: null, label: "No Category"),
+                          ...categories.map(
+                            (cat) =>
+                                DropdownMenuEntry(value: cat, label: cat.name),
+                          ),
+                        ],
                       )
                     : Text("No category"),
               ],

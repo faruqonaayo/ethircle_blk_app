@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/providers/app_data_provider.dart';
 import 'package:ethircle_blk_app/screens/favorite_screen.dart';
 import 'package:ethircle_blk_app/screens/categories_screen.dart';
 import 'package:ethircle_blk_app/widgets/add_options.dart';
 import 'package:ethircle_blk_app/widgets/app_mode_button.dart';
 
-class AppLayout extends StatefulWidget {
+class AppLayout extends ConsumerStatefulWidget {
   const AppLayout({super.key});
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<AppLayout> createState() {
     return _AppLayoutState();
   }
 }
 
-class _AppLayoutState extends State<AppLayout> {
+class _AppLayoutState extends ConsumerState<AppLayout> {
   var _currentPage = 0;
+
+  late Future<void> _loadAppData;
 
   final _pages = const [
     Text("Home"),
@@ -26,11 +30,26 @@ class _AppLayoutState extends State<AppLayout> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    final appData = ref.read(appDataProvider);
+    _loadAppData = appData;
+  }
+
+  @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(actions: [AppModeButton()]),
-      body: IndexedStack(index: _currentPage, children: _pages),
+      body: FutureBuilder(
+        future: _loadAppData,
+        builder: (context, asyncSnapshot) {
+          if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return IndexedStack(index: _currentPage, children: _pages);
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: colorScheme.surfaceContainerLow,

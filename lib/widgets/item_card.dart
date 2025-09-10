@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/services/item_services.dart';
 import 'package:ethircle_blk_app/screens/item_details_screen.dart';
 import 'package:ethircle_blk_app/providers/items_provider.dart';
 import 'package:ethircle_blk_app/models/category.dart';
@@ -29,6 +30,7 @@ class ItemCard extends ConsumerWidget {
             IconButton(
               onPressed: () {
                 itemsNotifier.removeItem(item.id);
+                ItemServices.deleteItem(item.id);
                 ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("${item.name} deleted successfully")),

@@ -31,7 +31,7 @@ class CategoryServices {
       "g_value": category.gValue,
       "b_value": category.bValue,
       "created_at": category.createdAt.toIso8601String(),
-      "updated_at": category.updatedAt.toIso8601String(),
+      "updated_at": DateTime.now().toIso8601String(),
     };
     await db.update(
       "category",

@@ -1,3 +1,4 @@
+import 'package:ethircle_blk_app/services/item_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -109,6 +110,7 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                         _item.isFavorite = !_item.isFavorite;
                       });
                       itemsNotifier.setFavorite(_item.id, _item.isFavorite);
+                      ItemServices.updateItem(_item.id, _item);
 
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(

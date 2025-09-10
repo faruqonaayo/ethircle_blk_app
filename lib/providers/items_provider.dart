@@ -1,9 +1,35 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/services/db_services.dart';
 import 'package:ethircle_blk_app/models/item.dart';
 
 class ItemsNotifier extends StateNotifier<List<Item>> {
   ItemsNotifier() : super([]);
+
+  Future<void> loadItems() async {
+    final db = await DbServices.db;
+
+    final items = await db.query("item");
+
+    for (var item in items) {
+      state = [
+        ...state,
+        Item(
+          id: item["id"] as String,
+          name: item["name"] as String,
+          description: item["description"] as String,
+          worth: item["worth"] as double,
+          address: item["address"] as String,
+          imageUrl: item["image_url"] as String,
+          catId: item["cat_id"] as String,
+          isFavorite: (item["is_favorite"] as int) == 1 ? true : false,
+          createdAt: DateTime.parse(item["created_at"] as String),
+          updatedAt: DateTime.parse(item["updated_at"] as String),
+        ),
+      ];
+    }
+    return;
+  }
 
   void addNewItem(Item item) {
     state = [...state, item];

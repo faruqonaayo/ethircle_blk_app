@@ -34,7 +34,7 @@ class Item {
   final double worth;
   final String address;
   final String imageUrl;
-  final String catId;
+  final String? catId;
   bool isFavorite;
   final DateTime createdAt;
   final DateTime updatedAt;
