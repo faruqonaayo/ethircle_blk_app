@@ -47,7 +47,10 @@ class ItemServices {
     await db.delete("item", where: "id = ?", whereArgs: [itemId]);
   }
 
-  static Future<String> saveImage(File image) async {
+  static Future<String> saveImage(File? image) async {
+    if (image == null) {
+      return "";
+    }
     final appDir = await syspath.getApplicationDocumentsDirectory();
     final extension = image.path.split(".").last;
 

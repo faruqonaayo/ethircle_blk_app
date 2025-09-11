@@ -39,20 +39,16 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     formState.save();
     final itemsNotifier = ref.read(itemsProvider.notifier);
 
-    // checking if any new immage was updated
-    String imagePath = "";
-    if (_selectedImage != null) {
-      imagePath = await ItemServices.saveImage(_selectedImage!);
-    }
-
     // logic to update data
     if (widget.isEditing != null) {
       final prevData = widget.isEditing!;
 
       // deleting previous image if it exists
-      if (imagePath != "" && prevData.imageUrl != "") {
+      if (_selectedImage != null && prevData.imageUrl != "") {
         await File(prevData.imageUrl).delete();
       }
+
+      String newImageUrl = await ItemServices.saveImage(_selectedImage);
 
       final updatedItem = Item(
         id: prevData.id,
@@ -60,11 +56,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         description: _enteredDescription,
         worth: double.parse(_enteredWorth),
         address: _enteredAddress,
-        imageUrl: imagePath == "" ? prevData.imageUrl : imagePath,
         catId: _selectedCategory?.id,
         isFavorite: prevData.isFavorite,
         createdAt: prevData.createdAt,
         updatedAt: DateTime.now(),
+        imageUrl: newImageUrl == "" ? prevData.imageUrl : newImageUrl,
       );
 
       itemsNotifier.editItem(updatedItem);
@@ -84,6 +80,12 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       // returns the new update as the screen is popped
       Navigator.of(context).pop(updatedItem);
       return;
+    }
+
+    // checking if any new image was updated
+    String imagePath = "";
+    if (_selectedImage != null) {
+      imagePath = await ItemServices.saveImage(_selectedImage!);
     }
 
     // creating new item
@@ -235,9 +237,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                         ),
                         width: double.infinity,
                         onSaved: (newValue) {
-                          setState(() {
-                            _selectedCategory = newValue;
-                          });
+                          _selectedCategory = newValue;
                         },
 
                         dropdownMenuEntries: [
