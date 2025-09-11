@@ -60,7 +60,7 @@ class ChartAnalysis extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            "Slide through your charts >>>",
+            "Check out the visualizations of you data",
             style: textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 8),

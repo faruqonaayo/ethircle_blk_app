@@ -58,10 +58,10 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
             ),
             const SizedBox(width: 8),
             Text(
-              "Welcome ...",
+              "BLK",
               style: Theme.of(
                 context,
-              ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+              ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),
             ),
           ],
         ),
