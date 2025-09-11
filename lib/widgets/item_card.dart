@@ -108,11 +108,17 @@ class ItemCard extends ConsumerWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadiusGeometry.circular(40),
                     child: item.imageUrl == ""
-                        ? Image.asset("assets/demo.jpg", width: 80, height: 80)
+                        ? Image.asset(
+                            "assets/demo.jpg",
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          )
                         : Image.file(
                             File(item.imageUrl),
                             width: 80,
                             height: 80,
+                            fit: BoxFit.cover,
                           ),
                   ),
                 ),
