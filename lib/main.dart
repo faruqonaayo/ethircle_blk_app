@@ -51,6 +51,9 @@ class BLKApp extends ConsumerWidget {
           fontWeight: FontWeight.w500,
         ),
       ),
+      appBarTheme: AppBarTheme().copyWith(
+        backgroundColor: colorScheme.surfaceContainerLow,
+      ),
     );
   }
 

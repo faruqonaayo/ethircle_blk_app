@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/screens/home_screen.dart';
 import 'package:ethircle_blk_app/providers/app_data_provider.dart';
 import 'package:ethircle_blk_app/screens/favorite_screen.dart';
 import 'package:ethircle_blk_app/screens/categories_screen.dart';
@@ -22,7 +23,7 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
   late Future<void> _loadAppData;
 
   final _pages = const [
-    Text("Home"),
+    HomeScreen(),
     CategoriesScreen(),
     Text("Add Data"),
     FavoriteScreen(),
@@ -40,7 +41,32 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(actions: [AppModeButton()]),
+      appBar: AppBar(
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 187, 224, 255),
+                ),
+                child: Icon(Icons.person, size: 16, color: Colors.blue),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              "Welcome ...",
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        actions: [AppModeButton()],
+      ),
       body: FutureBuilder(
         future: _loadAppData,
         builder: (context, asyncSnapshot) {
