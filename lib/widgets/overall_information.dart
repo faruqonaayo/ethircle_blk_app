@@ -1,8 +1,8 @@
-import 'package:ethircle_blk_app/models/category.dart';
-import 'package:ethircle_blk_app/models/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/models/category.dart';
+import 'package:ethircle_blk_app/models/item.dart';
 import 'package:ethircle_blk_app/widgets/information_card.dart';
 
 class OverallInformation extends ConsumerWidget {
@@ -33,7 +33,8 @@ class OverallInformation extends ConsumerWidget {
         color: colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: ListView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
