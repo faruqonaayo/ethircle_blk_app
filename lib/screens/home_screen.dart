@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/widgets/items_analysis.dart';
 import 'package:ethircle_blk_app/widgets/chart_analysis.dart';
 import 'package:ethircle_blk_app/providers/categories_provider.dart';
 import 'package:ethircle_blk_app/providers/items_provider.dart';
@@ -29,8 +30,8 @@ class HomeScreen extends ConsumerWidget {
           items: items,
           favorites: favorites,
         ),
-
-        
+        const SizedBox(height: 32),
+        ItemsAnalysis(items),
       ],
     );
   }
