@@ -16,23 +16,33 @@ class HomeScreen extends ConsumerWidget {
     final categories = ref.watch(categoriesProvider);
     final favorites = items.where((item) => item.isFavorite).toList();
 
-    return ListView(
-      padding: EdgeInsets.all(16),
-      children: [
-        OverallInformation(
-          categories: categories,
-          items: items,
-          favorites: favorites,
-        ),
-        const SizedBox(height: 32),
-        ChartAnalysis(
-          categories: categories,
-          items: items,
-          favorites: favorites,
-        ),
-        const SizedBox(height: 32),
-        ItemsAnalysis(items),
-      ],
+    return TweenAnimationBuilder(
+      duration: Duration(milliseconds: 800),
+      curve: Curves.easeInCubic,
+      tween: Tween(begin: 64.0, end: 0.0),
+      child: ListView(
+        padding: EdgeInsets.all(16),
+        children: [
+          OverallInformation(
+            categories: categories,
+            items: items,
+            favorites: favorites,
+          ),
+          const SizedBox(height: 32),
+          ChartAnalysis(
+            categories: categories,
+            items: items,
+            favorites: favorites,
+          ),
+          const SizedBox(height: 32),
+          ItemsAnalysis(items),
+        ],
+      ),
+
+      builder: (_, value, myChild) => Padding(
+        padding: EdgeInsetsGeometry.only(top: value),
+        child: myChild,
+      ),
     );
   }
 }

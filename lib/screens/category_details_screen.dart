@@ -67,48 +67,58 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
                 0.4,
               ),
       ),
-      body: ListView(
-        padding: EdgeInsets.all(24),
-        children: [
-          Text(
-            _category == null ? "All Items" : _category!.name,
-            style: textTheme.headlineMedium!.copyWith(
-              fontWeight: FontWeight.w800,
+      body: TweenAnimationBuilder(
+        duration: Duration(milliseconds: 540),
+        curve: Curves.easeInCubic,
+        tween: Tween(begin: 64.0, end: 0.0),
+        child: ListView(
+          padding: EdgeInsets.all(24),
+          children: [
+            Text(
+              _category == null ? "All Items" : _category!.name,
+              style: textTheme.headlineMedium!.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            _category == null ? "List of all Items" : _category!.description,
-            style: textTheme.bodyLarge!.copyWith(
-              color: colorScheme.secondary,
-              fontWeight: FontWeight.w400,
+            const SizedBox(height: 16),
+            Text(
+              _category == null ? "List of all Items" : _category!.description,
+              style: textTheme.bodyLarge!.copyWith(
+                color: colorScheme.secondary,
+                fontWeight: FontWeight.w400,
+              ),
             ),
-          ),
-          const SizedBox(height: 32),
-          Text(
-            "Category Items",
-            style: textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          categoryItems.isEmpty
-              ? Center(child: Text("No items yet!"))
-              : GridView.builder(
-                  primary: false,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 4,
-                    mainAxisSpacing: 8,
-                    mainAxisExtent: 240,
+            const SizedBox(height: 32),
+            Text(
+              "Category Items",
+              style: textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            categoryItems.isEmpty
+                ? Center(child: Text("No items yet!"))
+                : GridView.builder(
+                    primary: false,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 4,
+                      mainAxisSpacing: 8,
+                      mainAxisExtent: 240,
+                    ),
+                    itemCount: categoryItems.length,
+                    itemBuilder: (ctx, index) {
+                      final currentItem = categoryItems[index];
+                      return ItemCard(category: _category, item: currentItem);
+                    },
                   ),
-                  itemCount: categoryItems.length,
-                  itemBuilder: (ctx, index) {
-                    final currentItem = categoryItems[index];
-                    return ItemCard(category: _category, item: currentItem);
-                  },
-                ),
-        ],
+          ],
+        ),
+
+        builder: (_, value, myChild) => Padding(
+          padding: EdgeInsetsGeometry.only(top: value),
+          child: myChild,
+        ),
       ),
     );
   }

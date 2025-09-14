@@ -84,13 +84,22 @@ class _CategoryScreenState extends ConsumerState<CategoriesScreen> {
         const SizedBox(height: 32),
         categories.isEmpty
             ? Center(child: Text("No categories yet!"))
-            : ListView.separated(
-                primary: false,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: categories.length,
-                itemBuilder: (ctx, index) => CategoryCard(categories[index]),
-                separatorBuilder: (context, index) => SizedBox(height: 8),
+            : TweenAnimationBuilder(
+                duration: Duration(milliseconds: 800),
+                curve: Curves.easeInCubic,
+                tween: Tween(begin: 64.0, end: 0.0),
+                child: ListView.separated(
+                  primary: false,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: categories.length,
+                  itemBuilder: (ctx, index) => CategoryCard(categories[index]),
+                  separatorBuilder: (context, index) => SizedBox(height: 8),
+                ),
+                builder: (_, value, myChild) => Padding(
+                  padding: EdgeInsetsGeometry.only(top: value),
+                  child: myChild,
+                ),
               ),
       ],
     );

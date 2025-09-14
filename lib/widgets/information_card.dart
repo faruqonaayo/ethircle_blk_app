@@ -25,13 +25,16 @@ class _InformationCardState extends State<InformationCard> {
 
     return Card(
       elevation: 0,
+
       child: GestureDetector(
         onTap: () {
           setState(() {
             _active = !_active;
           });
         },
-        child: Container(
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 500),
+          curve: Curves.easeInOutCubic,
           height: 96,
           width: 200,
           padding: const EdgeInsets.all(8),
@@ -58,7 +61,7 @@ class _InformationCardState extends State<InformationCard> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    widget.value.toString(),
+                    _active ? widget.value.toString() : "****",
                     style: textTheme.headlineMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
