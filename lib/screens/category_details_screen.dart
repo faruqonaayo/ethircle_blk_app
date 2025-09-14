@@ -7,9 +7,9 @@ import 'package:ethircle_blk_app/models/category.dart';
 import 'package:ethircle_blk_app/screens/category_form_screen.dart';
 
 class CategoryDetailsScreen extends ConsumerStatefulWidget {
-  const CategoryDetailsScreen(this.category, {super.key});
+  const CategoryDetailsScreen({this.category, super.key});
 
-  final Category category;
+  final Category? category;
 
   @override
   ConsumerState<CategoryDetailsScreen> createState() =>
@@ -17,7 +17,7 @@ class CategoryDetailsScreen extends ConsumerStatefulWidget {
 }
 
 class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
-  late Category _category;
+  late Category? _category;
   @override
   void initState() {
     super.initState();
@@ -27,9 +27,9 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final items = ref.watch(itemsProvider);
-    final categoryItems = items
-        .where((item) => item.catId == _category.id)
-        .toList();
+    final categoryItems = _category == null
+        ? items
+        : items.where((item) => item.catId == _category!.id).toList();
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -37,41 +37,48 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
       appBar: AppBar(
         title: Text("Category Details"),
         actions: [
-          IconButton(
-            onPressed: () async {
-              // obtaining the result of the update
-              final result = await Navigator.of(context).push<Category>(
-                MaterialPageRoute(
-                  builder: (ctx) => CategoryFormScreen(isEditing: _category),
+          _category == null
+              ? SizedBox.shrink()
+              : IconButton(
+                  onPressed: () async {
+                    // obtaining the result of the update
+                    final result = await Navigator.of(context).push<Category>(
+                      MaterialPageRoute(
+                        builder: (ctx) =>
+                            CategoryFormScreen(isEditing: _category),
+                      ),
+                    );
+                    // seetting the result of the update to the new value
+                    if (result != null) {
+                      setState(() {
+                        _category = result;
+                      });
+                    }
+                  },
+                  icon: Icon(Icons.edit),
                 ),
-              );
-              // seetting the result of the update to the new value
-              setState(() {
-                _category = result!;
-              });
-            },
-            icon: Icon(Icons.edit),
-          ),
         ],
-        backgroundColor: Color.fromRGBO(
-          _category.rValue,
-          _category.gValue,
-          _category.bValue,
-          0.4,
-        ),
+        backgroundColor: _category == null
+            ? const Color.fromARGB(57, 96, 125, 139)
+            : Color.fromRGBO(
+                _category!.rValue,
+                _category!.gValue,
+                _category!.bValue,
+                0.4,
+              ),
       ),
       body: ListView(
         padding: EdgeInsets.all(24),
         children: [
           Text(
-            _category.name,
+            _category == null ? "All Items" : _category!.name,
             style: textTheme.headlineMedium!.copyWith(
               fontWeight: FontWeight.w800,
             ),
           ),
           const SizedBox(height: 16),
           Text(
-            _category.description,
+            _category == null ? "List of all Items" : _category!.description,
             style: textTheme.bodyLarge!.copyWith(
               color: colorScheme.secondary,
               fontWeight: FontWeight.w400,

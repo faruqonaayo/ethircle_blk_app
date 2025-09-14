@@ -83,7 +83,7 @@ class CategoryCard extends ConsumerWidget {
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (ctx) => CategoryDetailsScreen(category),
+                builder: (ctx) => CategoryDetailsScreen(category: category),
               ),
             );
           },

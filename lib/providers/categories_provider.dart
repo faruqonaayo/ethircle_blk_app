@@ -45,6 +45,21 @@ class CategoriesNotifier extends StateNotifier<List<Category>> {
       }
     }).toList();
   }
+
+  List<Category> searchCategory(String query, ) {
+    final lowerQuery = query.toLowerCase();
+
+    if (lowerQuery == "") {
+      return state;
+    }
+    return state
+        .where(
+          (cat) =>
+              cat.name.toLowerCase().contains(lowerQuery) ||
+              cat.description.toLowerCase().contains(lowerQuery),
+        )
+        .toList();
+  }
 }
 
 final categoriesProvider = StateNotifierProvider((ref) => CategoriesNotifier());

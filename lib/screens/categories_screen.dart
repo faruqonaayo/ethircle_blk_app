@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/screens/category_details_screen.dart';
 import 'package:ethircle_blk_app/widgets/category_card.dart';
 import 'package:ethircle_blk_app/providers/categories_provider.dart';
 
@@ -14,25 +15,72 @@ class CategoriesScreen extends ConsumerStatefulWidget {
 }
 
 class _CategoryScreenState extends ConsumerState<CategoriesScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  var _showSearchInput = false;
+  var _searchQuery = "";
 
   @override
   Widget build(BuildContext context) {
-    final categories = ref.watch(categoriesProvider);
     final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+    final categories = ref
+        .read(categoriesProvider.notifier)
+        .searchCategory(_searchQuery);
 
     return ListView(
       padding: EdgeInsets.all(16),
       children: [
-        Text(
-          "Categories",
-          style: textTheme.headlineMedium!.copyWith(
-            fontWeight: FontWeight.w800,
-          ),
+        Row(
+          children: [
+            Text(
+              "Categories",
+              style: textTheme.headlineMedium!.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const Spacer(),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                spacing: 2,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _showSearchInput = !_showSearchInput;
+                      });
+                    },
+                    icon: Icon(Icons.search),
+                    color: colorScheme.primary,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) => CategoryDetailsScreen(),
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.list, color: colorScheme.onSurface),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
+        const SizedBox(height: 8),
+        _showSearchInput
+            ? TextField(
+                onChanged: (value) {
+                  setState(() {
+                    _searchQuery = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  label: Text("Search"),
+                  border: OutlineInputBorder(),
+                ),
+              )
+            : SizedBox.shrink(),
         const SizedBox(height: 32),
         categories.isEmpty
             ? Center(child: Text("No categories yet!"))
