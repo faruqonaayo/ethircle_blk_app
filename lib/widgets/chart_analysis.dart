@@ -60,59 +60,70 @@ class ChartAnalysis extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            "Check out the visualizations of you data",
+            "Check out the visualizations of you items",
             style: textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 8),
-          Row(
-            spacing: 16,
-            children: [
-              Expanded(
-                child: _MyPieChart(
-                  containerColor: const Color.fromARGB(32, 105, 240, 175),
-                  sectionData: [
-                    PieChartSectionData(
-                      value: favorites.length.toDouble(),
-                      color: const Color.fromARGB(197, 255, 193, 7),
-                      title: "Favorites",
-                      radius: 10,
+
+          items.isEmpty
+              ? Center(
+                  child: Text(
+                    "Click the add button and start adding new items",
+                    style: textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: colorScheme.primary,
                     ),
-                    PieChartSectionData(
-                      value: (items.length - favorites.length).toDouble(),
-                      color: const Color.fromARGB(203, 155, 39, 176),
-                      title: "Non Favorites",
-                      radius: 10,
+                  ),
+                )
+              : Row(
+                  spacing: 16,
+                  children: [
+                    Expanded(
+                      child: _MyPieChart(
+                        containerColor: const Color.fromARGB(32, 105, 240, 175),
+                        sectionData: [
+                          PieChartSectionData(
+                            value: favorites.length.toDouble(),
+                            color: const Color.fromARGB(197, 255, 193, 7),
+                            title: "Favorites",
+                            radius: 10,
+                          ),
+                          PieChartSectionData(
+                            value: (items.length - favorites.length).toDouble(),
+                            color: const Color.fromARGB(203, 155, 39, 176),
+                            title: "Non Favorites",
+                            radius: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: _MyPieChart(
+                        containerColor: const Color.fromARGB(22, 240, 105, 141),
+                        sectionData: [
+                          PieChartSectionData(
+                            value: items
+                                .where((item) => item.catId != null)
+                                .length
+                                .toDouble(),
+                            color: const Color.fromARGB(158, 7, 255, 102),
+                            title: "Categorized",
+                            radius: 10,
+                          ),
+                          PieChartSectionData(
+                            value: items
+                                .where((item) => item.catId == null)
+                                .length
+                                .toDouble(),
+                            color: const Color.fromARGB(202, 117, 176, 39),
+                            title: "Non Categorized",
+                            radius: 10,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-              Expanded(
-                child: _MyPieChart(
-                  containerColor: const Color.fromARGB(22, 240, 105, 141),
-                  sectionData: [
-                    PieChartSectionData(
-                      value: items
-                          .where((item) => item.catId != null)
-                          .length
-                          .toDouble(),
-                      color: const Color.fromARGB(158, 7, 255, 102),
-                      title: "Categorized",
-                      radius: 10,
-                    ),
-                    PieChartSectionData(
-                      value: items
-                          .where((item) => item.catId == null)
-                          .length
-                          .toDouble(),
-                      color: const Color.fromARGB(202, 117, 176, 39),
-                      title: "Non Categorized",
-                      radius: 10,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
         ],
       ),
     );

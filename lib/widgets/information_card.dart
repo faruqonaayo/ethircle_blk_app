@@ -58,7 +58,7 @@ class _InformationCardState extends State<InformationCard> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    _active ? widget.value.toString() : "****",
+                    widget.value.toString(),
                     style: textTheme.headlineMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
