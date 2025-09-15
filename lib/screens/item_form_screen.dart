@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/models/place_location.dart';
+import 'package:ethircle_blk_app/widgets/location_field.dart';
 import 'package:ethircle_blk_app/services/item_services.dart';
 import 'package:ethircle_blk_app/providers/categories_provider.dart';
 import 'package:ethircle_blk_app/widgets/image_field.dart';
@@ -26,6 +28,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   var _enteredDescription = "";
   var _enteredWorth = "";
   var _enteredAddress = "";
+  PlaceLocation? _selectedLocation;
   Category? _selectedCategory;
   File? _selectedImage;
 
@@ -33,6 +36,19 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     final formState = _formKey.currentState;
 
     if (!formState!.validate()) {
+      return;
+    }
+
+    if (_selectedLocation == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Select your location",
+            style: TextStyle(color: Theme.of(context).colorScheme.onError),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
       return;
     }
 
@@ -60,6 +76,8 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         isFavorite: prevData.isFavorite,
         createdAt: prevData.createdAt,
         updatedAt: DateTime.now(),
+        lat: _selectedLocation!.lat,
+        long: _selectedLocation!.long,
         imageUrl: newImageUrl == "" ? prevData.imageUrl : newImageUrl,
       );
 
@@ -96,6 +114,8 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       address: _enteredAddress,
       imageUrl: imagePath,
       catId: _selectedCategory?.id,
+      lat: _selectedLocation!.lat,
+      long: _selectedLocation!.long,
     );
 
     itemsNotifier.addNewItem(newItem);
@@ -197,24 +217,36 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  initialValue: isEditing == null ? "" : isEditing.address,
-                  decoration: InputDecoration(
-                    label: Text("Address"),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a address';
-                    }
-                    return null;
-                  },
-                  onSaved: (newValue) {
-                    _enteredAddress = newValue!;
+                LocationField(
+                  onSelectLocation: (location) {
+                    setState(() {
+                      _selectedLocation = location;
+                    });
                   },
                 ),
+                const SizedBox(height: 16),
+                _selectedLocation == null
+                    ? SizedBox.shrink()
+                    : TextFormField(
+                        initialValue: isEditing == null
+                            ? _selectedLocation!.address ?? ""
+                            : isEditing.address,
+                        decoration: InputDecoration(
+                          label: Text("Address"),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Please enter a address';
+                          }
+                          return null;
+                        },
+                        onSaved: (newValue) {
+                          _enteredAddress = newValue!;
+                        },
+                      ),
                 const SizedBox(height: 16),
                 ImageField(
                   onSelectImage: (image) {

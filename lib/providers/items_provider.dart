@@ -22,6 +22,8 @@ class ItemsNotifier extends StateNotifier<List<Item>> {
           address: item["address"] as String,
           imageUrl: item["image_url"] as String,
           catId: item["cat_id"] as String,
+          lat: item["lat"] as double,
+          long: item["long"] as double,
           isFavorite: (item["is_favorite"] as int) == 1 ? true : false,
           createdAt: DateTime.parse(item["created_at"] as String),
           updatedAt: DateTime.parse(item["updated_at"] as String),

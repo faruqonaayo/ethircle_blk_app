@@ -35,6 +35,8 @@ class ItemServices {
       "address": item.address,
       "image_url": item.imageUrl,
       "cat_id": item.catId,
+      "lat": item.lat,
+      "long": item.long,
       "is_favorite": item.isFavorite ? 1 : 0,
       "created_at": item.createdAt.toIso8601String(),
       "updated_at": DateTime.now().toIso8601String(),

@@ -11,6 +11,8 @@ class Item {
     required this.address,
     required this.imageUrl,
     required this.catId,
+    required this.lat,
+    required this.long,
     required this.isFavorite,
     required this.createdAt,
     required this.updatedAt,
@@ -23,6 +25,8 @@ class Item {
     required this.address,
     required this.imageUrl,
     required this.catId,
+    required this.lat,
+    required this.long,
   }) : id = uuid.v4(),
        isFavorite = false,
        createdAt = DateTime.now(),
@@ -33,6 +37,8 @@ class Item {
   final String description;
   final double worth;
   final String address;
+  final double lat;
+  final double long;
   final String imageUrl;
   final String? catId;
   bool isFavorite;

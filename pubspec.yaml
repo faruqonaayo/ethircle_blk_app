@@ -43,6 +43,10 @@ dependencies:
   path: ^1.9.1
   path_provider: ^2.1.5
   fl_chart: ^1.1.0
+  location: ^8.0.1
+  flutter_map: ^8.2.1
+  latlong2: ^0.9.1
+  http: ^1.5.0
 
 dev_dependencies:
   flutter_test:
