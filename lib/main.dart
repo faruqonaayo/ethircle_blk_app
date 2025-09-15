@@ -10,12 +10,13 @@ void main() {
 }
 
 var kColorScheme = ColorScheme.fromSeed(
-  seedColor: Color.fromRGBO(34, 40, 49, 1),
+  seedColor: Color.fromRGBO(53, 79, 82, 1),
   brightness: Brightness.light,
 );
 
 var kDarkColorScheme = ColorScheme.fromSeed(
-  seedColor: Color.fromRGBO(34, 40, 49, 1),
+  seedColor: Color.fromRGBO(53, 79, 82, 1),
+
   brightness: Brightness.dark,
 );
 
@@ -26,7 +27,7 @@ class BLKApp extends ConsumerWidget {
     return ThemeData().copyWith(
       colorScheme: colorScheme,
       scaffoldBackgroundColor: colorScheme.surface,
-      textTheme: GoogleFonts.latoTextTheme().apply(
+      textTheme: GoogleFonts.poppinsTextTheme().apply(
         bodyColor: colorScheme.onSurface,
         displayColor: colorScheme.onSurface,
       ),

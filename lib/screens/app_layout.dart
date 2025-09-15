@@ -67,14 +67,23 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
         ),
         actions: [AppModeButton()],
       ),
-      body: FutureBuilder(
-        future: _loadAppData,
-        builder: (context, asyncSnapshot) {
-          if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          return IndexedStack(index: _currentPage, children: _pages);
-        },
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [colorScheme.surfaceContainerLow, colorScheme.surfaceDim],
+            begin: AlignmentGeometry.topCenter,
+            end: AlignmentGeometry.bottomCenter,
+          ),
+        ),
+        child: FutureBuilder(
+          future: _loadAppData,
+          builder: (context, asyncSnapshot) {
+            if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return _pages[_currentPage];
+          },
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

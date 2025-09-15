@@ -132,6 +132,19 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    if (widget.isEditing != null) {
+      _selectedLocation = PlaceLocation(
+        lat: widget.isEditing!.lat,
+        long: widget.isEditing!.long,
+        address: widget.isEditing!.address,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
     final categories = ref.watch(categoriesProvider);

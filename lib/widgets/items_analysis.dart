@@ -87,7 +87,7 @@ class _ItemsAnalysisState extends State<ItemsAnalysis> {
       height: 416,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerLow,
+        color: colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -137,7 +137,7 @@ class _ItemsAnalysisState extends State<ItemsAnalysis> {
           const SizedBox(height: 8),
           Text(
             _title,
-            style: textTheme.bodyLarge!.copyWith(
+            style: textTheme.bodySmall!.copyWith(
               fontWeight: FontWeight.w700,
               fontStyle: FontStyle.italic,
             ),

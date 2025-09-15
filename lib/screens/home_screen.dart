@@ -17,7 +17,7 @@ class HomeScreen extends ConsumerWidget {
     final favorites = items.where((item) => item.isFavorite).toList();
 
     return TweenAnimationBuilder(
-      duration: Duration(milliseconds: 800),
+      duration: Duration(milliseconds: 500),
       curve: Curves.easeInCubic,
       tween: Tween(begin: 64.0, end: 0.0),
       child: ListView(

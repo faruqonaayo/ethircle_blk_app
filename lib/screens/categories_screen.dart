@@ -26,69 +26,69 @@ class _CategoryScreenState extends ConsumerState<CategoriesScreen> {
         .read(categoriesProvider.notifier)
         .searchCategory(_searchQuery);
 
-    return ListView(
-      padding: EdgeInsets.all(16),
-      children: [
-        Row(
-          children: [
-            Text(
-              "Categories",
-              style: textTheme.headlineMedium!.copyWith(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            const Spacer(),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                spacing: 2,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _showSearchInput = !_showSearchInput;
-                      });
-                    },
-                    icon: Icon(Icons.search),
-                    color: colorScheme.primary,
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (ctx) => CategoryDetailsScreen(),
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.list, color: colorScheme.onSurface),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        _showSearchInput
-            ? TextField(
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value;
-                  });
-                },
-                decoration: InputDecoration(
-                  label: Text("Search"),
-                  border: OutlineInputBorder(),
+    return TweenAnimationBuilder(
+      duration: Duration(milliseconds: 500),
+      curve: Curves.linear,
+      tween: Tween(begin: 160.0, end: 0.0),
+      child: ListView(
+        padding: EdgeInsets.all(16),
+        children: [
+          Row(
+            children: [
+              Text(
+                "Categories",
+                style: textTheme.headlineMedium!.copyWith(
+                  fontWeight: FontWeight.w800,
                 ),
-              )
-            : SizedBox.shrink(),
-        const SizedBox(height: 32),
-        categories.isEmpty
-            ? Center(child: Text("No categories yet!"))
-            : TweenAnimationBuilder(
-                duration: Duration(milliseconds: 800),
-                curve: Curves.easeInCubic,
-                tween: Tween(begin: 64.0, end: 0.0),
-                child: ListView.separated(
+              ),
+              const Spacer(),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  spacing: 2,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _showSearchInput = !_showSearchInput;
+                        });
+                      },
+                      icon: Icon(Icons.search),
+                      color: colorScheme.primary,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => CategoryDetailsScreen(),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.list, color: colorScheme.onSurface),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          _showSearchInput
+              ? TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    label: Text("Search"),
+                    border: OutlineInputBorder(),
+                  ),
+                )
+              : SizedBox.shrink(),
+          const SizedBox(height: 32),
+          categories.isEmpty
+              ? Center(child: Text("No categories yet!"))
+              : ListView.separated(
                   primary: false,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
@@ -96,12 +96,10 @@ class _CategoryScreenState extends ConsumerState<CategoriesScreen> {
                   itemBuilder: (ctx, index) => CategoryCard(categories[index]),
                   separatorBuilder: (context, index) => SizedBox(height: 8),
                 ),
-                builder: (_, value, myChild) => Padding(
-                  padding: EdgeInsetsGeometry.only(top: value),
-                  child: myChild,
-                ),
-              ),
-      ],
+        ],
+      ),
+      builder: (_, value, myChild) =>
+          Transform.translate(offset: Offset(value, 0), child: myChild),
     );
   }
 }

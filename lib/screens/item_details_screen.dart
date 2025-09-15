@@ -104,11 +104,20 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
             children: [
               Row(
                 children: [
-                  Text(
-                    _item.name,
-                    style: textTheme.headlineSmall!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1,
+                  SizedBox(
+                    height: 40,
+                    width: 240,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        Text(
+                          _item.name,
+                          style: textTheme.headlineSmall!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const Spacer(),

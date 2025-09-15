@@ -67,10 +67,10 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
                 0.4,
               ),
       ),
-      body: TweenAnimationBuilder(
-        duration: Duration(milliseconds: 540),
-        curve: Curves.easeInCubic,
-        tween: Tween(begin: 64.0, end: 0.0),
+      body: TweenAnimationBuilder<double>(
+        duration: Duration(milliseconds: 480),
+        curve: Curves.linear,
+        tween: Tween(begin: 0.8, end: 1.0),
         child: ListView(
           padding: EdgeInsets.all(24),
           children: [
@@ -114,11 +114,8 @@ class _CategoryDetailsScreenState extends ConsumerState<CategoryDetailsScreen> {
                   ),
           ],
         ),
-
-        builder: (_, value, myChild) => Padding(
-          padding: EdgeInsetsGeometry.only(top: value),
-          child: myChild,
-        ),
+        builder: (_, scale, myChild) =>
+            Transform.scale(scale: scale, child: myChild),
       ),
     );
   }

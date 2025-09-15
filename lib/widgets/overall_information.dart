@@ -30,7 +30,7 @@ class OverallInformation extends ConsumerWidget {
       height: 200,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerLow,
+        color: colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(

@@ -14,43 +14,50 @@ class FavoriteScreen extends ConsumerWidget {
     final allItems = ref.watch(itemsProvider);
     final favoriteItems = allItems.where((item) => item.isFavorite).toList();
 
-    return ListView(
-      padding: EdgeInsets.all(16),
-      children: [
-        Text(
-          "Favorites",
-          style: textTheme.headlineMedium!.copyWith(
-            fontWeight: FontWeight.w800,
+    return TweenAnimationBuilder(
+      duration: Duration(milliseconds: 500),
+      curve: Curves.linear,
+      tween: Tween(begin: 160.0, end: 0.0),
+      child: ListView(
+        padding: EdgeInsets.all(16),
+        children: [
+          Text(
+            "Favorites",
+            style: textTheme.headlineMedium!.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          "Explore your favorite items here",
-          style: textTheme.bodyLarge!.copyWith(
-            color: colorScheme.secondary,
-            fontWeight: FontWeight.w400,
+          const SizedBox(height: 8),
+          Text(
+            "Explore your favorite items here",
+            style: textTheme.bodyLarge!.copyWith(
+              color: colorScheme.secondary,
+              fontWeight: FontWeight.w400,
+            ),
           ),
-        ),
-        const SizedBox(height: 32),
-        favoriteItems.isEmpty
-            ? Center(child: Text("No favorite items yet!"))
-            : GridView.builder(
-                primary: false,
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 4,
-                  mainAxisSpacing: 8,
-                  mainAxisExtent: 240,
+          const SizedBox(height: 32),
+          favoriteItems.isEmpty
+              ? Center(child: Text("No favorite items yet!"))
+              : GridView.builder(
+                  primary: false,
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 4,
+                    mainAxisSpacing: 8,
+                    mainAxisExtent: 240,
+                  ),
+                  itemCount: favoriteItems.length,
+                  itemBuilder: (ctx, index) {
+                    final currentItem = favoriteItems[index];
+                    return ItemCard(item: currentItem);
+                  },
                 ),
-                itemCount: favoriteItems.length,
-                itemBuilder: (ctx, index) {
-                  final currentItem = favoriteItems[index];
-                  return ItemCard(item: currentItem);
-                },
-              ),
-      ],
+        ],
+      ),
+      builder: (_, value, myChild) =>
+          Transform.translate(offset: Offset(value, 0), child: myChild),
     );
   }
 }
