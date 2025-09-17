@@ -101,6 +101,8 @@ class _LocationFieldState extends State<LocationField> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
       padding: EdgeInsets.all(16),
       width: double.infinity,
@@ -110,6 +112,11 @@ class _LocationFieldState extends State<LocationField> {
       ),
       child: Column(
         children: [
+          Text(
+            "Pin Location on Map",
+            style: textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
           Text(
             "Location Suggestion",
             style: TextStyle(fontWeight: FontWeight.bold),

@@ -39,19 +39,6 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       return;
     }
 
-    if (_selectedLocation == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            "Select your location",
-            style: TextStyle(color: Theme.of(context).colorScheme.onError),
-          ),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
-      );
-      return;
-    }
-
     formState.save();
     final itemsNotifier = ref.read(itemsProvider.notifier);
 
@@ -76,9 +63,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         isFavorite: prevData.isFavorite,
         createdAt: prevData.createdAt,
         updatedAt: DateTime.now(),
-        lat: _selectedLocation!.lat,
-        long: _selectedLocation!.long,
         imageUrl: newImageUrl == "" ? prevData.imageUrl : newImageUrl,
+        lat: _selectedLocation == null ? prevData.lat : _selectedLocation!.lat,
+        long: _selectedLocation == null
+            ? prevData.long
+            : _selectedLocation!.long,
       );
 
       itemsNotifier.editItem(updatedItem);
@@ -114,8 +103,8 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       address: _enteredAddress,
       imageUrl: imagePath,
       catId: _selectedCategory?.id,
-      lat: _selectedLocation!.lat,
-      long: _selectedLocation!.long,
+      lat: _selectedLocation?.lat,
+      long: _selectedLocation?.long,
     );
 
     itemsNotifier.addNewItem(newItem);
@@ -132,29 +121,23 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    if (widget.isEditing != null) {
-      _selectedLocation = PlaceLocation(
-        lat: widget.isEditing!.lat,
-        long: widget.isEditing!.long,
-        address: widget.isEditing!.address,
-      );
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
     final categories = ref.watch(categoriesProvider);
     final isEditing = widget.isEditing;
 
+    // checking if category of the data to edit is not null and setting the _selected category to the appropriate value
     if (isEditing != null) {
+      final categoryExist = categories.any((cat) => cat.id == isEditing.catId);
+
       setState(() {
-        _selectedCategory = categories.firstWhere(
-          (cat) => cat.id == isEditing.catId,
-        );
+        if (categoryExist) {
+          _selectedCategory = categories.firstWhere(
+            (cat) => cat.id == isEditing.catId,
+          );
+        } else {
+          _selectedCategory = null;
+        }
       });
     }
 
@@ -233,33 +216,32 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 LocationField(
                   onSelectLocation: (location) {
                     setState(() {
-                      _selectedLocation = location;
+                      _selectedLocation = PlaceLocation(
+                        lat: location.lat,
+                        long: location.long,
+                      );
                     });
                   },
                 ),
                 const SizedBox(height: 16),
-                _selectedLocation == null
-                    ? SizedBox.shrink()
-                    : TextFormField(
-                        initialValue: isEditing == null
-                            ? _selectedLocation!.address ?? ""
-                            : isEditing.address,
-                        decoration: InputDecoration(
-                          label: Text("Address"),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'Please enter a address';
-                          }
-                          return null;
-                        },
-                        onSaved: (newValue) {
-                          _enteredAddress = newValue!;
-                        },
-                      ),
+                TextFormField(
+                  initialValue: isEditing == null ? "" : isEditing.address,
+                  decoration: InputDecoration(
+                    label: Text("Address"),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter a address';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) {
+                    _enteredAddress = newValue!;
+                  },
+                ),
                 const SizedBox(height: 16),
                 ImageField(
                   onSelectImage: (image) {

@@ -44,8 +44,6 @@ class ItemServices {
       "updated_at": DateTime.now().toIso8601String(),
     };
     await db.update("item", itemMap, where: "id = ?", whereArgs: [itemId]);
-
-    print(await db.query("item"));
   }
 
   static void deleteItem(String itemId) async {
