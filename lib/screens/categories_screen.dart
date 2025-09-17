@@ -22,9 +22,7 @@ class _CategoryScreenState extends ConsumerState<CategoriesScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-    final categories = ref
-        .read(categoriesProvider.notifier)
-        .searchCategory(_searchQuery);
+    final categories = ref.watch(categoriesProvider);
 
     return TweenAnimationBuilder(
       duration: Duration(milliseconds: 500),
