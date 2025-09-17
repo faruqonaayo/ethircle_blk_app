@@ -11,25 +11,25 @@ class ItemsNotifier extends StateNotifier<List<Item>> {
 
     final items = await db.query("item");
 
-    for (var item in items) {
-      state = [
-        ...state,
-        Item(
-          id: item["id"] as String,
-          name: item["name"] as String,
-          description: item["description"] as String,
-          worth: item["worth"] as double,
-          address: item["address"] as String,
-          imageUrl: item["image_url"] as String,
-          catId: item["cat_id"] as String,
-          lat: item["lat"] as double,
-          long: item["long"] as double,
-          isFavorite: (item["is_favorite"] as int) == 1 ? true : false,
-          createdAt: DateTime.parse(item["created_at"] as String),
-          updatedAt: DateTime.parse(item["updated_at"] as String),
-        ),
-      ];
-    }
+    state = items
+        .map(
+          (item) => Item(
+            id: item["id"] as String,
+            name: item["name"] as String,
+            description: item["description"] as String,
+            worth: item["worth"] as double,
+            address: item["address"] as String,
+            imageUrl: item["image_url"] as String,
+            catId: item["cat_id"] as String?,
+            lat: item["lat"] as double,
+            long: item["long"] as double,
+            isFavorite: (item["is_favorite"] as int) == 1 ? true : false,
+            createdAt: DateTime.parse(item["created_at"] as String),
+            updatedAt: DateTime.parse(item["updated_at"] as String),
+          ),
+        )
+        .toList();
+
     return;
   }
 
