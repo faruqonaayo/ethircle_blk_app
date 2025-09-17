@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:ethircle_blk_app/screens/home_screen.dart';
+import 'package:ethircle_blk_app/providers/shared_pref_provider.dart';
 import 'package:ethircle_blk_app/providers/app_data_provider.dart';
 import 'package:ethircle_blk_app/screens/favorite_screen.dart';
 import 'package:ethircle_blk_app/screens/categories_screen.dart';
@@ -18,7 +20,8 @@ class AppLayout extends ConsumerStatefulWidget {
 }
 
 class _AppLayoutState extends ConsumerState<AppLayout> {
-  var _currentPage = 0;
+  late int _currentPage;
+  late SharedPreferencesWithCache _sharedPreferencesWithCache;
 
   late Future<void> _loadAppData;
 
@@ -35,11 +38,14 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
     super.initState();
     final appData = ref.read(appDataProvider);
     _loadAppData = appData;
+    _sharedPreferencesWithCache = ref.read(sharedPrefProvider);
+    _currentPage = _sharedPreferencesWithCache.getInt("currentPage") ?? 0;
   }
 
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -121,7 +127,7 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
             label: "Profile",
           ),
         ],
-        onTap: (value) {
+        onTap: (value) async {
           // Tapping on the add icon in the navigation bar acts differently by displaying a modal bottom sheet with options
           if (value == 2) {
             showModalBottomSheet(
@@ -137,6 +143,8 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
             );
             return;
           }
+
+          _sharedPreferencesWithCache.setInt("currentPage", value);
           setState(() {
             _currentPage = value;
           });

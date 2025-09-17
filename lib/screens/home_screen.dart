@@ -1,3 +1,4 @@
+import 'package:ethircle_blk_app/widgets/map_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,6 +16,7 @@ class HomeScreen extends ConsumerWidget {
     final items = ref.watch(itemsProvider);
     final categories = ref.watch(categoriesProvider);
     final favorites = items.where((item) => item.isFavorite).toList();
+    final textTheme = Theme.of(context).textTheme;
 
     return TweenAnimationBuilder(
       duration: Duration(milliseconds: 500),
@@ -23,6 +25,23 @@ class HomeScreen extends ConsumerWidget {
       child: ListView(
         padding: EdgeInsets.all(16),
         children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Check locations on map 🗺️",
+                style: textTheme.titleSmall!.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 16),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(80),
+                child: MapDisplay(items: items),
+              ),
+            ],
+          ),
+          const SizedBox(height: 32),
           OverallInformation(
             categories: categories,
             items: items,

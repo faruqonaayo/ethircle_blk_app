@@ -198,6 +198,44 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                   letterSpacing: 1,
                 ),
               ),
+              const SizedBox(height: 8),
+              if (_item.lat != null && _item.lat != null)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Latitude: ",
+                      style: textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "${_item.lat}",
+                      style: textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: colorScheme.secondary,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Longitude: ",
+                      style: textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "${_item.lat}",
+                      style: textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: colorScheme.secondary,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ],
+                ),
             ],
           ),
         ),
