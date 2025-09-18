@@ -1,3 +1,5 @@
+import 'package:ethircle_blk_app/screens/profile_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +32,7 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
     CategoriesScreen(),
     Text("Add Data"),
     FavoriteScreen(),
-    Text("Profile"),
+    ProfileScreen(),
   ];
 
   @override
@@ -71,7 +73,15 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
             ),
           ],
         ),
-        actions: [AppModeButton()],
+        actions: [
+          AppModeButton(),
+          IconButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(

@@ -23,7 +23,5 @@ void uploadToCloudinary(File file) async {
     final responseStr = await response.stream.bytesToString();
 
     final result = jsonDecode(responseStr);
-    print(result["url"]);
-    
   }
 }

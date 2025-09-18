@@ -27,6 +27,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
     final formState = _formKey.currentState;
 
     if (!formState!.validate()) {
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
