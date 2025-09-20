@@ -46,7 +46,7 @@ class _AuthScreenState extends State<AuthScreen>
             "firstName": _enteredFirstName,
             "lastName": _enteredLastName,
             "email": _enteredEmail,
-            "userUID": fbAuth.currentUser!.uid,
+            "authUID": fbAuth.currentUser!.uid,
           });
         }
 

@@ -10,7 +10,7 @@ class UserNotifier extends StateNotifier<BlkUser?> {
   Future<void> loadUser() async {
     final response = await FirebaseFirestore.instance
         .collection("users")
-        .where("userUID", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where("authUID", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get();
     final doc = response.docs[0];
 
@@ -18,8 +18,13 @@ class UserNotifier extends StateNotifier<BlkUser?> {
       firstName: doc["firstName"],
       lastName: doc["lastName"],
       email: doc["email"],
-      userUID: doc["userUID"],
+      authUID: doc["authUID"],
+      userID: doc.id,
     );
+  }
+
+  void updateProfile(BlkUser user) {
+    state = user;
   }
 }
 

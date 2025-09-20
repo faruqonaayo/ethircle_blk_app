@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/widgets/password_change.dart';
 import 'package:ethircle_blk_app/providers/user_provider.dart';
 import 'package:ethircle_blk_app/screens/profile_screen.dart';
 
@@ -83,7 +84,16 @@ class SettingsScreen extends ConsumerWidget {
             },
           ),
           const SizedBox(height: 16),
-          _SettingsOption(label: "Change Password", icon: Icons.lock_outlined),
+          _SettingsOption(
+            label: "Change Password",
+            icon: Icons.lock_outlined,
+            onTapOption: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (ctx) => PasswordChange(ctx),
+              );
+            },
+          ),
           const SizedBox(height: 16),
           _SettingsOption(label: "FAQ's", icon: Icons.question_mark),
           const SizedBox(height: 16),

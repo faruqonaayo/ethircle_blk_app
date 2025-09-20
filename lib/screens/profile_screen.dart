@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/models/blk_user.dart';
+import 'package:ethircle_blk_app/services/user_services.dart';
 import 'package:ethircle_blk_app/providers/user_provider.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -28,11 +30,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   void _saveProfile() {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
+
       // Save logic here
+      final userData = ref.watch(userProvider);
+      final userNotifier = ref.read(userProvider.notifier);
+
+      final updatedData = BlkUser(
+        firstName: _firstName,
+        lastName: _lastName,
+        email: _email,
+        authUID: userData!.authUID,
+        userID: userData.userID,
+      );
+
+      UserServices.updateProfile(updatedData);
+
+      userNotifier.updateProfile(updatedData);
 
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Profile updated!')));
+
+      Navigator.of(context).pop();
     }
   }
 
