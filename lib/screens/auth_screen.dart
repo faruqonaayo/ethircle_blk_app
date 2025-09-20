@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -8,69 +9,55 @@ class AuthScreen extends StatefulWidget {
   State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _AuthScreenState extends State<AuthScreen>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   bool _isLogin = true;
-  String _email = '';
-  String _password = '';
-  String _cPassword = '';
+  String _enteredFirstName = '';
+  String _enteredLastName = '';
+  String _enteredEmail = '';
+  String _enteredPassword = '';
+  String _enteredCPassword = '';
 
   void _submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
 
-      // checking for pasword match
-      if (!_isLogin && _cPassword != _password) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "Password must match",
-              style: TextStyle(color: Theme.of(context).colorScheme.onError),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
-        print("hey");
+      if (!_isLogin && _enteredCPassword != _enteredPassword) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Passwords must match")));
         return;
       }
 
-      // Handle authentication logic here
       try {
         final fbAuth = FirebaseAuth.instance;
-
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(_isLogin ? 'Logging in...' : 'Signing up...')),
-        );
         if (_isLogin) {
-          fbAuth.signInWithEmailAndPassword(email: _email, password: _password);
+          await fbAuth.signInWithEmailAndPassword(
+            email: _enteredEmail,
+            password: _enteredPassword,
+          );
         } else {
           await fbAuth.createUserWithEmailAndPassword(
-            email: _email,
-            password: _password,
+            email: _enteredEmail,
+            password: _enteredPassword,
           );
+          FirebaseFirestore.instance.collection("users").add({
+            "firstName": _enteredFirstName,
+            "lastName": _enteredLastName,
+            "email": _enteredEmail,
+            "userUID": fbAuth.currentUser!.uid,
+          });
         }
+
         if (!mounted) {
           return;
         }
       } on FirebaseAuthException catch (e) {
-        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              e.message ?? "An error has occured",
-              style: TextStyle(color: Theme.of(context).colorScheme.onError),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
-      } catch (e) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              e.toString(),
+              e.message ?? "Authentication failed",
               style: TextStyle(color: Theme.of(context).colorScheme.onError),
             ),
             backgroundColor: Theme.of(context).colorScheme.error,
@@ -82,119 +69,182 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.blueGrey[50],
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Card(
-            elevation: 8,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [colorScheme.surfaceContainerLow, colorScheme.surfaceDim],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Icon(Icons.lock_outline, size: 64, color: Colors.blueGrey),
-                    const SizedBox(height: 16),
-                    Text(
-                      _isLogin ? 'Welcome Back' : 'Create Account',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                    Icon(
+                      Icons.inventory_outlined,
+                      size: 20,
+                      color: colorScheme.primary,
                     ),
-                    const SizedBox(height: 24),
-                    TextFormField(
-                      key: const ValueKey('email'),
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.email),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty ||
-                            !value.contains('@')) {
-                          return 'Please enter a valid email address.';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) => _email = value!.trim(),
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      key: const ValueKey('password'),
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        prefixIcon: Icon(Icons.lock),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.length < 6) {
-                          return 'Password must be at least 6 characters long.';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) => _password = value!,
-                    ),
-                    const SizedBox(height: 16),
-                    _isLogin
-                        ? SizedBox.shrink()
-                        : TextFormField(
-                            key: const ValueKey('cPassword'),
-                            decoration: InputDecoration(
-                              labelText: 'Confirm Password',
-                              prefixIcon: Icon(Icons.lock),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                            ),
-                            obscureText: true,
-                            validator: (value) {
-                              if (value == null || value.length < 6) {
-                                return 'Password must be at least 6 characters long.';
-                              }
-                              return null;
-                            },
-                            onSaved: (value) => _cPassword = value!,
-                          ),
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _submitForm,
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                        ),
-                        child: Text(_isLogin ? 'Login' : 'Sign Up'),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _isLogin = !_isLogin;
-                        });
-                      },
-                      child: Text(
-                        _isLogin
-                            ? 'Don\'t have an account? Sign Up'
-                            : 'Already have an account? Login',
-                      ),
-                    ),
+                    const SizedBox(width: 8),
+                    Text("Ethircle BLK", style: theme.textTheme.titleSmall),
                   ],
                 ),
-              ),
+                const SizedBox(height: 12),
+                Text(
+                  _isLogin ? "Welcome Back!" : "Start Keep Track Today!",
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  _isLogin
+                      ? "Login to continue your journey"
+                      : "Create an account to get started",
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                ),
+                const SizedBox(height: 40),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        if (!_isLogin) ...[
+                          _buildRoundedField(
+                            key: const ValueKey("firstname"),
+                            hint: "First Name",
+                            icon: Icons.person,
+                            validator: (v) => v == null || v.isEmpty
+                                ? "Enter first name"
+                                : null,
+                            onSaved: (v) => _enteredFirstName = v!.trim(),
+                          ),
+                          const SizedBox(height: 16),
+                          _buildRoundedField(
+                            key: const ValueKey("lastname"),
+                            hint: "Last Name",
+                            icon: Icons.person_outline,
+                            validator: (v) => v == null || v.isEmpty
+                                ? "Enter last name"
+                                : null,
+                            onSaved: (v) => _enteredLastName = v!.trim(),
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                        _buildRoundedField(
+                          key: const ValueKey("email"),
+                          hint: "Email",
+                          icon: Icons.email,
+                          keyboard: TextInputType.emailAddress,
+                          validator: (v) => v == null || !v.contains("@")
+                              ? "Enter valid email"
+                              : null,
+                          onSaved: (v) => _enteredEmail = v!.trim(),
+                        ),
+                        const SizedBox(height: 16),
+                        _buildRoundedField(
+                          key: const ValueKey("password"),
+                          hint: "Password",
+                          icon: Icons.lock,
+                          obscure: true,
+                          validator: (v) => v == null || v.length < 6
+                              ? "Min 6 characters"
+                              : null,
+                          onSaved: (v) => _enteredPassword = v!,
+                        ),
+                        const SizedBox(height: 16),
+                        if (!_isLogin)
+                          _buildRoundedField(
+                            key: const ValueKey("cPassword"),
+                            hint: "Confirm Password",
+                            icon: Icons.lock_outline,
+                            obscure: true,
+                            validator: (v) => v == null || v.length < 6
+                                ? "Min 6 characters"
+                                : null,
+                            onSaved: (v) => _enteredCPassword = v!,
+                          ),
+                        const SizedBox(height: 28),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(elevation: 4),
+                            onPressed: _submitForm,
+                            child: Text(
+                              _isLogin ? "Login" : "Sign Up",
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        GestureDetector(
+                          onTap: () => setState(() => _isLogin = !_isLogin),
+                          child: Text(
+                            _isLogin
+                                ? "Don’t have an account? Sign Up"
+                                : "Already have an account? Login",
+                            style: TextStyle(
+                              color: colorScheme.secondary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRoundedField({
+    required Key key,
+    required String hint,
+    required IconData icon,
+    bool obscure = false,
+    TextInputType keyboard = TextInputType.text,
+    String? Function(String?)? validator,
+    void Function(String?)? onSaved,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return TextFormField(
+      key: key,
+      obscureText: obscure,
+      keyboardType: keyboard,
+      validator: validator,
+      onSaved: onSaved,
+      decoration: InputDecoration(
+        hintText: hint,
+        prefixIcon: Icon(icon, color: colorScheme.primary),
+        filled: true,
+        fillColor: colorScheme.surfaceContainerLowest,
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 20,
+          horizontal: 24,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
         ),
       ),
     );

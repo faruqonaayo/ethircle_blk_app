@@ -1,9 +1,10 @@
-import 'package:ethircle_blk_app/screens/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:ethircle_blk_app/providers/user_provider.dart';
+import 'package:ethircle_blk_app/screens/profile_screen.dart';
 import 'package:ethircle_blk_app/screens/home_screen.dart';
 import 'package:ethircle_blk_app/providers/shared_pref_provider.dart';
 import 'package:ethircle_blk_app/providers/app_data_provider.dart';
@@ -47,6 +48,7 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
+    final userData = ref.watch(userProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -66,7 +68,7 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
             ),
             const SizedBox(width: 8),
             Text(
-              "BLK",
+              "Hey ${userData?.firstName ?? "..."}",
               style: Theme.of(
                 context,
               ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),
