@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:ethircle_blk_app/screens/settings_screen.dart';
 import 'package:ethircle_blk_app/providers/user_provider.dart';
-import 'package:ethircle_blk_app/screens/profile_screen.dart';
 import 'package:ethircle_blk_app/screens/home_screen.dart';
 import 'package:ethircle_blk_app/providers/shared_pref_provider.dart';
 import 'package:ethircle_blk_app/providers/app_data_provider.dart';
@@ -33,7 +33,7 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
     CategoriesScreen(),
     Text("Add Data"),
     FavoriteScreen(),
-    ProfileScreen(),
+    SettingsScreen(),
   ];
 
   @override
@@ -135,8 +135,8 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
             label: "Favorites",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: "Profile",
+            icon: Icon(Icons.settings),
+            label: "Settings",
           ),
         ],
         onTap: (value) async {
