@@ -73,145 +73,154 @@ class _AuthScreenState extends State<AuthScreen>
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [colorScheme.surfaceContainerLow, colorScheme.surfaceDim],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+      body: TweenAnimationBuilder(
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInCubic,
+        tween: Tween(begin: 64.0, end: 0.0),
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [colorScheme.surfaceContainerLow, colorScheme.surfaceDim],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.inventory_outlined,
-                      size: 20,
-                      color: colorScheme.primary,
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.inventory_outlined,
+                        size: 20,
+                        color: colorScheme.primary,
+                      ),
+                      const SizedBox(width: 8),
+                      Text("Ethircle BLK", style: theme.textTheme.titleSmall),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    _isLogin ? "Welcome Back!" : "Start Keep Track Today!",
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.onSurface,
                     ),
-                    const SizedBox(width: 8),
-                    Text("Ethircle BLK", style: theme.textTheme.titleSmall),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  _isLogin ? "Welcome Back!" : "Start Keep Track Today!",
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: colorScheme.onSurface,
                   ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  _isLogin
-                      ? "Login to continue your journey"
-                      : "Create an account to get started",
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.onSurface.withValues(alpha: 0.7),
+                  const SizedBox(height: 6),
+                  Text(
+                    _isLogin
+                        ? "Login to continue your journey"
+                        : "Create an account to get started",
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 40),
+                  const SizedBox(height: 40),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        if (!_isLogin) ...[
+                  SizedBox(
+                    width: double.infinity,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          if (!_isLogin) ...[
+                            _buildRoundedField(
+                              key: const ValueKey("firstname"),
+                              hint: "First Name",
+                              icon: Icons.person,
+                              validator: (v) => v == null || v.isEmpty
+                                  ? "Enter first name"
+                                  : null,
+                              onSaved: (v) => _enteredFirstName = v!.trim(),
+                            ),
+                            const SizedBox(height: 16),
+                            _buildRoundedField(
+                              key: const ValueKey("lastname"),
+                              hint: "Last Name",
+                              icon: Icons.person_outline,
+                              validator: (v) => v == null || v.isEmpty
+                                  ? "Enter last name"
+                                  : null,
+                              onSaved: (v) => _enteredLastName = v!.trim(),
+                            ),
+                            const SizedBox(height: 16),
+                          ],
                           _buildRoundedField(
-                            key: const ValueKey("firstname"),
-                            hint: "First Name",
-                            icon: Icons.person,
-                            validator: (v) => v == null || v.isEmpty
-                                ? "Enter first name"
+                            key: const ValueKey("email"),
+                            hint: "Email",
+                            icon: Icons.email,
+                            keyboard: TextInputType.emailAddress,
+                            validator: (v) => v == null || !v.contains("@")
+                                ? "Enter valid email"
                                 : null,
-                            onSaved: (v) => _enteredFirstName = v!.trim(),
+                            onSaved: (v) => _enteredEmail = v!.trim(),
                           ),
                           const SizedBox(height: 16),
                           _buildRoundedField(
-                            key: const ValueKey("lastname"),
-                            hint: "Last Name",
-                            icon: Icons.person_outline,
-                            validator: (v) => v == null || v.isEmpty
-                                ? "Enter last name"
-                                : null,
-                            onSaved: (v) => _enteredLastName = v!.trim(),
-                          ),
-                          const SizedBox(height: 16),
-                        ],
-                        _buildRoundedField(
-                          key: const ValueKey("email"),
-                          hint: "Email",
-                          icon: Icons.email,
-                          keyboard: TextInputType.emailAddress,
-                          validator: (v) => v == null || !v.contains("@")
-                              ? "Enter valid email"
-                              : null,
-                          onSaved: (v) => _enteredEmail = v!.trim(),
-                        ),
-                        const SizedBox(height: 16),
-                        _buildRoundedField(
-                          key: const ValueKey("password"),
-                          hint: "Password",
-                          icon: Icons.lock,
-                          obscure: true,
-                          validator: (v) => v == null || v.length < 6
-                              ? "Min 6 characters"
-                              : null,
-                          onSaved: (v) => _enteredPassword = v!,
-                        ),
-                        const SizedBox(height: 16),
-                        if (!_isLogin)
-                          _buildRoundedField(
-                            key: const ValueKey("cPassword"),
-                            hint: "Confirm Password",
-                            icon: Icons.lock_outline,
+                            key: const ValueKey("password"),
+                            hint: "Password",
+                            icon: Icons.lock,
                             obscure: true,
                             validator: (v) => v == null || v.length < 6
                                 ? "Min 6 characters"
                                 : null,
-                            onSaved: (v) => _enteredCPassword = v!,
+                            onSaved: (v) => _enteredPassword = v!,
                           ),
-                        const SizedBox(height: 28),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(elevation: 4),
-                            onPressed: _submitForm,
+                          const SizedBox(height: 16),
+                          if (!_isLogin)
+                            _buildRoundedField(
+                              key: const ValueKey("cPassword"),
+                              hint: "Confirm Password",
+                              icon: Icons.lock_outline,
+                              obscure: true,
+                              validator: (v) => v == null || v.length < 6
+                                  ? "Min 6 characters"
+                                  : null,
+                              onSaved: (v) => _enteredCPassword = v!,
+                            ),
+                          const SizedBox(height: 28),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(elevation: 4),
+                              onPressed: _submitForm,
+                              child: Text(
+                                _isLogin ? "Login" : "Sign Up",
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          GestureDetector(
+                            onTap: () => setState(() => _isLogin = !_isLogin),
                             child: Text(
-                              _isLogin ? "Login" : "Sign Up",
-                              style: const TextStyle(fontSize: 16),
+                              _isLogin
+                                  ? "Don’t have an account? Sign Up"
+                                  : "Already have an account? Login",
+                              style: TextStyle(
+                                color: colorScheme.secondary,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        GestureDetector(
-                          onTap: () => setState(() => _isLogin = !_isLogin),
-                          child: Text(
-                            _isLogin
-                                ? "Don’t have an account? Sign Up"
-                                : "Already have an account? Login",
-                            style: TextStyle(
-                              color: colorScheme.secondary,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
+        ),
+        builder: (_, value, myChild) => Padding(
+          padding: EdgeInsetsGeometry.only(top: value),
+          child: myChild,
         ),
       ),
     );
