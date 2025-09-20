@@ -46,16 +46,15 @@ A powerful **mobile inventory management solution** built with Flutter that help
 
 ## 🛠️ Technology Stack
 
-| Component          | Technology             | Purpose                                   |
-| ------------------ | ---------------------- | ----------------------------------------- | ----------------------- | --- |
-| **Frontend**       | Flutter (Dart)         | Cross-platform mobile development         |
-| **Backend**        | Firebase               | Authentication, Database, Cloud Functions |
-| **Database**       | Firestore              | NoSQL cloud database                      |
-| **Authentication** | Firebase Auth          | User management and security              |
-| **Image Storage**  | Cloudinary             | Cloud-based image management              |
-| **Maps**           | OpenMapAPI             | Location services and mapping             |
-| **Analytics**      | Firebase Analytics     | User behavior tracking                    |
-| <!--               | **Push Notifications** | FCM                                       | Real-time notifications | --> |
+| Component          | Technology         | Purpose                                   |
+| ------------------ | ------------------ | ----------------------------------------- |
+| **Frontend**       | Flutter (Dart)     | Cross-platform mobile development         |
+| **Backend**        | Firebase           | Authentication, Database, Cloud Functions |
+| **Database**       | Firestore          | NoSQL cloud database                      |
+| **Authentication** | Firebase Auth      | User management and security              |
+| **Image Storage**  | Cloudinary         | Cloud-based image management              |
+| **Maps**           | OpenMapAPI         | Location services and mapping             |
+| **Analytics**      | Firebase Analytics | User behavior tracking                    |
 
 ## 📋 Prerequisites
 
