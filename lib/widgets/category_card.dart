@@ -26,8 +26,8 @@ class CategoryCard extends ConsumerWidget {
           actions: [
             IconButton(
               onPressed: () {
-                categoriesNotifier.removeCategory(category.id);
-                CategoryServices.deleteCategory(category.id);
+                categoriesNotifier.removeCategory(category.id!);
+                CategoryServices.deleteCategory(category.id!);
                 ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 final uuid = Uuid();
 
 class Category {
-  const Category({
+  Category({
     required this.id,
     required this.name,
     required this.description,
@@ -22,11 +22,10 @@ class Category {
     required this.rValue,
     required this.gValue,
     required this.bValue,
-  }) : id = uuid.v4(),
-       createdAt = DateTime.now(),
+  }) : createdAt = DateTime.now(),
        updatedAt = DateTime.now();
 
-  final String id;
+  String? id;
   final String name;
   final String description;
   final double aValue;

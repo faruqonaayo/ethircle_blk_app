@@ -23,7 +23,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
   var _enteredDescription = "";
   late Color _selectedColor;
 
-  void _submitForm() {
+  void _submitForm() async {
     final formState = _formKey.currentState;
 
     if (!formState!.validate()) {
@@ -57,7 +57,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
         updatedAt: DateTime.now(),
       );
       categoriesNotifier.editCategory(updatedCat);
-      CategoryServices.updateCategory(prevData.id, updatedCat);
+      CategoryServices.updateCategory(prevData.id!, updatedCat);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -80,9 +80,11 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
       bValue: (_selectedColor.b * 255).toInt(),
     );
 
-    categoriesNotifier.addNewCategory(newCategory);
+    final response = await CategoryServices.addCategory(newCategory);
 
-    CategoryServices.addCategory(newCategory);
+    newCategory.id = response;
+
+    categoriesNotifier.addNewCategory(newCategory);
 
     formState.reset();
 

@@ -1,28 +1,36 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:ethircle_blk_app/services/db_services.dart';
 import 'package:ethircle_blk_app/models/category.dart';
 
 class CategoriesNotifier extends StateNotifier<List<Category>> {
   CategoriesNotifier() : super([]);
-  Future<void> loadCategories() async {
-    final db = await DbServices.db;
 
-    final categories = await db.query("category");
+  static final _fireStore = FirebaseFirestore.instance;
+  static final _fireAuth = FirebaseAuth.instance;
+
+  Future<void> loadCategories() async {
+    final response = await _fireStore
+        .collection("categories")
+        .where("userID", isEqualTo: _fireAuth.currentUser!.uid)
+        .get();
+
+    final categories = response.docs;
 
     for (var cat in categories) {
       state = [
         ...state,
         Category(
-          id: cat["id"] as String,
+          id: cat.id,
           name: cat["name"] as String,
           description: cat["description"] as String,
-          aValue: cat["a_value"] as double,
-          rValue: cat["r_value"] as int,
-          gValue: cat["g_value"] as int,
-          bValue: cat["b_value"] as int,
-          createdAt: DateTime.parse(cat["created_at"] as String),
-          updatedAt: DateTime.parse(cat["updated_at"] as String),
+          aValue: cat["aValue"] as double,
+          rValue: cat["rValue"] as int,
+          gValue: cat["gValue"] as int,
+          bValue: cat["bValue"] as int,
+          createdAt: DateTime.parse(cat["createdAt"] as String),
+          updatedAt: DateTime.parse(cat["updatedAt"] as String),
         ),
       ];
     }
@@ -46,7 +54,7 @@ class CategoriesNotifier extends StateNotifier<List<Category>> {
     }).toList();
   }
 
-  List<Category> searchCategory(String query, ) {
+  List<Category> searchCategory(String query) {
     final lowerQuery = query.toLowerCase();
 
     if (lowerQuery == "") {
