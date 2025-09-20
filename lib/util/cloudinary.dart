@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 final cloudinaryObj = Cloudinary.fromCloudName(cloudName: "du7eu4jhl");
 
-void uploadToCloudinary(File file) async {
+Future<String> uploadToCloudinary(File file) async {
   final url = Uri.parse("https://api.cloudinary.com/v1_1/du7eu4jhl/upload");
 
   final request = http.MultipartRequest("POST", url);
@@ -23,5 +23,9 @@ void uploadToCloudinary(File file) async {
     final responseStr = await response.stream.bytesToString();
 
     final result = jsonDecode(responseStr);
+    return result["url"];
   }
+
+  return "";
 }
+

@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ethircle_blk_app/util/cloudinary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:path_provider/path_provider.dart' as syspath;
 
 import 'package:ethircle_blk_app/models/item.dart';
 
@@ -72,13 +72,9 @@ class ItemServices {
     if (image == null) {
       return "";
     }
-    final appDir = await syspath.getApplicationDocumentsDirectory();
-    final extension = image.path.split(".").last;
 
-    final imagePath =
-        "${appDir.path}/${DateTime.now().microsecondsSinceEpoch.toString()}.$extension";
+    final imagePath = await uploadToCloudinary(image);
 
-    final savedImage = await image.copy(imagePath);
-    return savedImage.path;
+    return imagePath;
   }
 }

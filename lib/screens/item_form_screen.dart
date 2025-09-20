@@ -47,9 +47,9 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       final prevData = widget.isEditing!;
 
       // deleting previous image if it exists
-      if (_selectedImage != null && prevData.imageUrl != "") {
-        await File(prevData.imageUrl).delete();
-      }
+      // if (_selectedImage != null && prevData.imageUrl != "") {
+      //   await File(prevData.imageUrl).delete();
+      // }
 
       String newImageUrl = await ItemServices.saveImage(_selectedImage);
 
@@ -101,8 +101,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       description: _enteredDescription,
       worth: double.parse(_enteredWorth),
       address: _enteredAddress,
-      imageUrl:
-          "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/dell/dell-15-intel-3530/media-gallery/laptop-dell-dc15250nt-bk-plastic-gallery-1.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=627&qlt=100,1&resMode=sharp2&size=627,402&chrss=full",
+      imageUrl: imagePath,
       catId: _selectedCategory?.id,
       lat: _selectedLocation?.lat,
       long: _selectedLocation?.long,
