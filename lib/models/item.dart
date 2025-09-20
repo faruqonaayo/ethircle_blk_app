@@ -4,7 +4,7 @@ final uuid = Uuid();
 
 class Item {
   Item({
-    required this.id,
+    this.id,
     required this.name,
     required this.description,
     required this.worth,
@@ -27,12 +27,11 @@ class Item {
     required this.catId,
     this.lat,
     this.long,
-  }) : id = uuid.v4(),
-       isFavorite = false,
+  }) : isFavorite = false,
        createdAt = DateTime.now(),
        updatedAt = DateTime.now();
 
-  final String id;
+  String? id;
   final String name;
   final String description;
   final double worth;

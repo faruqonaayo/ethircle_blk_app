@@ -1,54 +1,71 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart' as syspath;
 
 import 'package:ethircle_blk_app/models/item.dart';
-import 'package:ethircle_blk_app/services/db_services.dart';
 
 class ItemServices {
-  static void addItem(Item item) async {
-    final db = await DbServices.db;
+  static final _fireStore = FirebaseFirestore.instance;
+  static final _fireAuth = FirebaseAuth.instance;
+
+  static Future<String> addItem(Item item) async {
+    final itemsCollection = _fireStore.collection("items");
 
     final itemMap = {
-      "id": item.id,
       "name": item.name,
       "description": item.description,
       "worth": item.worth,
       "address": item.address,
-      "image_url": item.imageUrl,
-      "cat_id": item.catId,
+      "imageUrl": item.imageUrl,
+      "catId": item.catId,
       "lat": item.lat,
       "long": item.long,
-      "is_favorite": item.isFavorite ? 1 : 0,
-      "created_at": item.createdAt.toIso8601String(),
-      "updated_at": item.updatedAt.toIso8601String(),
+      "isFavorite": item.isFavorite ? 1 : 0,
+      "createdAt": item.createdAt.toIso8601String(),
+      "updatedAt": item.updatedAt.toIso8601String(),
     };
 
-    await db.insert("item", itemMap);
+    final response = await itemsCollection.add({
+      ...itemMap,
+      "userID": _fireAuth.currentUser!.uid,
+    });
+
+    return response.id;
   }
 
   static void updateItem(String itemId, Item item) async {
-    final db = await DbServices.db;
-    final itemMap = {
-      "id": item.id,
-      "name": item.name,
-      "description": item.description,
-      "worth": item.worth,
-      "address": item.address,
-      "image_url": item.imageUrl,
-      "cat_id": item.catId,
-      "lat": item.lat,
-      "long": item.long,
-      "is_favorite": item.isFavorite ? 1 : 0,
-      "created_at": item.createdAt.toIso8601String(),
-      "updated_at": DateTime.now().toIso8601String(),
-    };
-    await db.update("item", itemMap, where: "id = ?", whereArgs: [itemId]);
+    final itemsCollection = _fireStore.collection("items");
+    final itemDoc = await itemsCollection.doc(itemId).get();
+
+    if (itemDoc.exists &&
+        itemDoc.data()?["userID"] == _fireAuth.currentUser!.uid) {
+      final itemMap = {
+        "name": item.name,
+        "description": item.description,
+        "worth": item.worth,
+        "address": item.address,
+        "imageUrl": item.imageUrl,
+        "catId": item.catId,
+        "lat": item.lat,
+        "long": item.long,
+        "isFavorite": item.isFavorite ? 1 : 0,
+        "createdAt": item.createdAt.toIso8601String(),
+        "updatedAt": DateTime.now().toIso8601String(),
+      };
+      await itemsCollection.doc(itemId).update(itemMap);
+    }
   }
 
   static void deleteItem(String itemId) async {
-    final db = await DbServices.db;
-    await db.delete("item", where: "id = ?", whereArgs: [itemId]);
+    final itemsCollection = _fireStore.collection("items");
+    final itemDoc = await itemsCollection.doc(itemId).get();
+
+    if (itemDoc.exists &&
+        itemDoc.data()?["userID"] == _fireAuth.currentUser!.uid) {
+      itemsCollection.doc(itemId).delete();
+    }
   }
 
   static Future<String> saveImage(File? image) async {

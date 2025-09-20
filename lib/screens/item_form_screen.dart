@@ -71,7 +71,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       );
 
       itemsNotifier.editItem(updatedItem);
-      ItemServices.updateItem(prevData.id, updatedItem);
+      ItemServices.updateItem(prevData.id!, updatedItem);
 
       if (!mounted) {
         return;
@@ -101,14 +101,17 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       description: _enteredDescription,
       worth: double.parse(_enteredWorth),
       address: _enteredAddress,
-      imageUrl: imagePath,
+      imageUrl:
+          "https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/dell/dell-15-intel-3530/media-gallery/laptop-dell-dc15250nt-bk-plastic-gallery-1.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=627&qlt=100,1&resMode=sharp2&size=627,402&chrss=full",
       catId: _selectedCategory?.id,
       lat: _selectedLocation?.lat,
       long: _selectedLocation?.long,
     );
 
+    final response = await ItemServices.addItem(newItem);
+    newItem.id = response;
+
     itemsNotifier.addNewItem(newItem);
-    ItemServices.addItem(newItem);
     formState.reset();
 
     if (!mounted) {

@@ -67,8 +67,8 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                       width: double.infinity,
                       fit: BoxFit.cover,
                     )
-                  : Image.file(
-                      File(_item.imageUrl),
+                  : Image.network(
+                      _item.imageUrl,
                       width: double.infinity,
                       fit: BoxFit.cover,
                       alignment: Alignment.center,
@@ -126,8 +126,8 @@ class _ItemDetailsScreenState extends ConsumerState<ItemDetailsScreen> {
                       setState(() {
                         _item.isFavorite = !_item.isFavorite;
                       });
-                      itemsNotifier.setFavorite(_item.id, _item.isFavorite);
-                      ItemServices.updateItem(_item.id, _item);
+                      itemsNotifier.setFavorite(_item.id!, _item.isFavorite);
+                      ItemServices.updateItem(_item.id!, _item);
 
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(

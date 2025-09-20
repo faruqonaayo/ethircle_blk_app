@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -31,8 +29,8 @@ class ItemCard extends ConsumerWidget {
           actions: [
             IconButton(
               onPressed: () {
-                itemsNotifier.removeItem(item.id);
-                ItemServices.deleteItem(item.id);
+                itemsNotifier.removeItem(item.id!);
+                ItemServices.deleteItem(item.id!);
                 ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("${item.name} deleted successfully")),
@@ -114,8 +112,8 @@ class ItemCard extends ConsumerWidget {
                             height: 80,
                             fit: BoxFit.cover,
                           )
-                        : Image.file(
-                            File(item.imageUrl),
+                        : Image.network(
+                            item.imageUrl,
                             width: 80,
                             height: 80,
                             fit: BoxFit.cover,

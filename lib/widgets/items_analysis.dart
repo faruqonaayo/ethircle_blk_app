@@ -166,8 +166,8 @@ class _ItemsAnalysisState extends State<ItemsAnalysis> {
                                 height: 160,
                                 fit: BoxFit.cover,
                               )
-                            : Image.file(
-                                File(_displayItem[0].imageUrl),
+                            : Image.network(
+                                _displayItem[0].imageUrl,
                                 width: double.infinity,
                                 height: 160,
                                 fit: BoxFit.cover,
