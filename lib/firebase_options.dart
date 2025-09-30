@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDd2cELgabVGvVWlTetDI3IzJphhVFUtAs',
-    appId: '1:540169150361:android:d1243d9e744c7fe9ac7d08',
+    appId: '1:540169150361:android:0f42167d3391ca9eac7d08',
     messagingSenderId: '540169150361',
     projectId: 'ethircle-blk-app-6a013',
     storageBucket: 'ethircle-blk-app-6a013.firebasestorage.app',
