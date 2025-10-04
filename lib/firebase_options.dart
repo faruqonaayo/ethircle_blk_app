@@ -17,19 +17,13 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -54,10 +48,28 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDd2cELgabVGvVWlTetDI3IzJphhVFUtAs',
-    appId: '1:540169150361:android:0f42167d3391ca9eac7d08',
+    appId: '1:540169150361:android:0beaa130c2b03173ac7d08',
     messagingSenderId: '540169150361',
     projectId: 'ethircle-blk-app-6a013',
     storageBucket: 'ethircle-blk-app-6a013.firebasestorage.app',
+  );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBWUOv3AYQetVHuwmKSYC8H00HIPifzaP4',
+    appId: '1:540169150361:web:0a47eb34b4630752ac7d08',
+    messagingSenderId: '540169150361',
+    projectId: 'ethircle-blk-app-6a013',
+    authDomain: 'ethircle-blk-app-6a013.firebaseapp.com',
+    storageBucket: 'ethircle-blk-app-6a013.firebasestorage.app',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyA7u0lHU43NGprNEOJbqO2w9SgLMAn6k6o',
+    appId: '1:540169150361:ios:7d299012bafd4608ac7d08',
+    messagingSenderId: '540169150361',
+    projectId: 'ethircle-blk-app-6a013',
+    storageBucket: 'ethircle-blk-app-6a013.firebasestorage.app',
+    iosBundleId: 'com.example.ethircleBlkApp',
   );
 
 }
