@@ -44,7 +44,7 @@ class _ItemFormState extends State<ItemForm> {
         ),
         SizedBox(height: 8),
         Text(
-          "Let's start filling up your \ninventory ",
+          "Let's start filling up your \ninventory with a new item ",
           style: textTheme.titleMedium!.copyWith(
             color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
           ),
@@ -68,7 +68,7 @@ class _ItemFormState extends State<ItemForm> {
             dropdownColor: colorScheme.primaryContainer,
 
             items: MeasureUnit.values
-                .map((unit) => buildDropdownItem(unit.name))
+                .map((unit) => buildDropdownItem(unit.name, unit.text))
                 .toList(),
             onChanged: (value) {
               setState(() {
@@ -100,7 +100,7 @@ class _ItemFormState extends State<ItemForm> {
     );
   }
 
-  DropdownMenuItem buildDropdownItem(String text) {
-    return DropdownMenuItem(value: text, child: Text(text));
+  DropdownMenuItem buildDropdownItem(String value, String displayText) {
+    return DropdownMenuItem(value: value, child: Text(displayText));
   }
 }

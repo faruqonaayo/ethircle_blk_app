@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:ethircle_blk_app/screens/inventory_form.dart';
 import 'package:ethircle_blk_app/screens/item_form.dart';
 import 'package:ethircle_blk_app/app_layout.dart';
 
@@ -27,6 +28,7 @@ class BlkApp extends StatelessWidget {
     routes: [
       GoRoute(path: "/", builder: (ctx, state) => AppLayout()),
       GoRoute(path: "/new-item", builder: (ctx, state) => ItemForm()),
+      GoRoute(path: "/new-inventory", builder: (ctx, state) => InventoryForm()),
     ],
   );
 

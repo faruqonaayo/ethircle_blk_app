@@ -44,7 +44,10 @@ class AddOptions extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pop();
+              context.push("/new-inventory");
+            },
           ),
         ],
       ),
