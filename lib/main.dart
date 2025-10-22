@@ -1,18 +1,91 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'package:ethircle_blk_app/app_layout.dart';
 
 void main() {
-  runApp(const BlkApp());
+  runApp(BlkApp());
 }
 
+var kColorScheme = ColorScheme.fromSeed(
+  seedColor: Color.fromRGBO(53, 79, 82, 1),
+  brightness: Brightness.light,
+);
+
+var kDarkColorScheme = ColorScheme.fromSeed(
+  seedColor: Color.fromRGBO(53, 79, 82, 1),
+  brightness: Brightness.dark,
+);
+
 class BlkApp extends StatelessWidget {
-  const BlkApp({super.key});
+  BlkApp({super.key});
+
+  final router = GoRouter(
+    initialLocation: "/",
+    routes: [GoRoute(path: "/", builder: (ctx, state) => AppLayout())],
+  );
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: Text('Ethircle BlkApp')),
-        body: Center(child: Text('Hello, Ethircle BlkApp!')),
+    return MaterialApp.router(
+      title: "Ethircle BlkApp",
+      themeMode: ThemeMode.light,
+      theme: getThemeConfig(kColorScheme),
+      darkTheme: getThemeConfig(kDarkColorScheme),
+      routerConfig: router,
+    );
+  }
+
+  ThemeData getThemeConfig(ColorScheme colorScheme) {
+    return ThemeData().copyWith(
+      colorScheme: colorScheme,
+      scaffoldBackgroundColor: colorScheme.surface,
+      appBarTheme: AppBarTheme().copyWith(
+        backgroundColor: colorScheme.surfaceContainerLowest,
+        foregroundColor: colorScheme.onSurface,
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData().copyWith(
+        backgroundColor: colorScheme.surfaceContainerLowest,
+        selectedItemColor: colorScheme.primary,
+        unselectedItemColor: colorScheme.onSurfaceVariant,
+      ),
+      textTheme: GoogleFonts.poppinsTextTheme().copyWith(
+        titleLarge: GoogleFonts.poppins(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: colorScheme.onSurface,
+        ),
+        titleMedium: GoogleFonts.poppins(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: colorScheme.onSurface,
+        ),
+        titleSmall: GoogleFonts.poppins(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: colorScheme.onSurface,
+        ),
+        bodyLarge: GoogleFonts.poppins(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: colorScheme.onSurface,
+        ),
+        bodyMedium: GoogleFonts.poppins(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: colorScheme.onSurface,
+        ),
+        bodySmall: GoogleFonts.poppins(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: colorScheme.onSurface,
+        ),
+        labelMedium: GoogleFonts.poppins(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: colorScheme.onSurfaceVariant,
+        ),
       ),
     );
   }
