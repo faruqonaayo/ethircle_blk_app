@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:ethircle_blk_app/widgets/add_options.dart';
+
 class AppLayout extends StatefulWidget {
   const AppLayout({super.key});
 
@@ -19,6 +21,13 @@ class _AppLayoutState extends State<AppLayout> {
         items: bottomBarItems,
         currentIndex: _currentPage,
         onTap: (value) {
+          if (value == 1) {
+            showModalBottomSheet(
+              context: context,
+              builder: (ctx) => AddOptions(),
+            );
+            return;
+          }
           setState(() {
             _currentPage = value;
           });
