@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AddOptions extends StatelessWidget {
   const AddOptions({super.key});
@@ -25,7 +26,10 @@ class AddOptions extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pop();
+              context.push("/new-item");
+            },
           ),
           const SizedBox(height: 8),
           ListTile(

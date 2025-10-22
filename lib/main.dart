@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:ethircle_blk_app/screens/item_form.dart';
 import 'package:ethircle_blk_app/app_layout.dart';
 
 void main() {
@@ -23,7 +24,10 @@ class BlkApp extends StatelessWidget {
 
   final router = GoRouter(
     initialLocation: "/",
-    routes: [GoRoute(path: "/", builder: (ctx, state) => AppLayout())],
+    routes: [
+      GoRoute(path: "/", builder: (ctx, state) => AppLayout()),
+      GoRoute(path: "/new-item", builder: (ctx, state) => ItemForm()),
+    ],
   );
 
   @override
@@ -50,10 +54,21 @@ class BlkApp extends StatelessWidget {
         selectedItemColor: colorScheme.primary,
         unselectedItemColor: colorScheme.onSurfaceVariant,
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
+          textStyle: GoogleFonts.poppins(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      ),
       textTheme: GoogleFonts.poppinsTextTheme().copyWith(
         titleLarge: GoogleFonts.poppins(
           fontSize: 20,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           color: colorScheme.onSurface,
         ),
         titleMedium: GoogleFonts.poppins(
