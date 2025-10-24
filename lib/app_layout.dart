@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:ethircle_blk_app/screens/inventory_list.dart';
 import 'package:ethircle_blk_app/widgets/add_options.dart';
 
 class AppLayout extends StatefulWidget {
@@ -11,11 +12,21 @@ class AppLayout extends StatefulWidget {
 
 class _AppLayoutState extends State<AppLayout> {
   var _currentPage = 0;
+
+  final pages = [
+    Center(child: Text('Dashboard Page')),
+    SizedBox.shrink(),
+    InventoryList(),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBar(title: Text('Ethircle BlkApp')),
-      body: Center(child: Text('Hello, Ethircle BlkApp!')),
+      appBar: AppBar(
+        title: Text('Ethircle BlkApp', style: textTheme.titleSmall),
+      ),
+      body: pages[_currentPage],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: bottomBarItems,

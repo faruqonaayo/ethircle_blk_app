@@ -1,7 +1,9 @@
-import 'package:ethircle_blk_app/data/database/local_db.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
+import 'package:ethircle_blk_app/data/database/local_db.dart';
+import 'package:ethircle_blk_app/data/models/inventory_type.dart';
+import 'package:ethircle_blk_app/data/models/inventory_use.dart';
 import 'package:ethircle_blk_app/data/models/inventory.dart';
 
 final uuid = Uuid();
@@ -10,8 +12,8 @@ class InventoryService {
   static Inventory createNewInventory({
     required String name,
     required String description,
-    required String type,
-    required String use,
+    required InventoryType type,
+    required InventoryUse use,
     required int rColor,
     required int gColor,
     required int bColor,
@@ -38,8 +40,8 @@ class InventoryService {
         'id': inventory.id,
         'name': inventory.name,
         'description': inventory.description,
-        'type': inventory.type,
-        'use': inventory.use,
+        'type': inventory.type.name,
+        'use': inventory.use.name,
         'rColor': inventory.rColor,
         'gColor': inventory.gColor,
         'bColor': inventory.bColor,

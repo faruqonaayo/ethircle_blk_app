@@ -1,9 +1,12 @@
+import 'package:ethircle_blk_app/data/models/inventory_type.dart';
+import 'package:ethircle_blk_app/data/models/inventory_use.dart';
+
 class Inventory {
   final String id;
   final String name;
   final String description;
-  final String type;
-  final String use;
+  final InventoryType type;
+  final InventoryUse use;
   final int rColor;
   final int gColor;
   final int bColor;

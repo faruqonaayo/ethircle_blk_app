@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/data/providers/inventory_provider.dart';
 import 'package:ethircle_blk_app/data/services/inventory_service.dart';
 import 'package:ethircle_blk_app/data/models/inventory_type.dart';
 import 'package:ethircle_blk_app/data/models/inventory_use.dart';
 import 'package:ethircle_blk_app/widgets/input_field.dart';
 
-class InventoryForm extends StatefulWidget {
+class InventoryForm extends ConsumerStatefulWidget {
   const InventoryForm({super.key});
 
   @override
-  State<InventoryForm> createState() => _InventoryFormState();
+  ConsumerState<InventoryForm> createState() => _InventoryFormState();
 }
 
-class _InventoryFormState extends State<InventoryForm> {
+class _InventoryFormState extends ConsumerState<InventoryForm> {
   final _formKey = GlobalKey<FormState>();
-  var _selectedType = InventoryType.values.first.name;
-  var _selectedUse = InventoryUse.values.first.name;
+  var _selectedType = InventoryType.values.first;
+  var _selectedUse = InventoryUse.values.first;
   Color _selectedColor = Colors.cyan;
   var _enteredName = "";
   var _enteredDescription = "";
@@ -103,7 +105,7 @@ class _InventoryFormState extends State<InventoryForm> {
             dropdownColor: colorScheme.primaryContainer,
 
             items: InventoryType.values
-                .map((type) => buildDropdownItem(type.name, type.text))
+                .map((type) => buildDropdownItem(type, type.text))
                 .toList(),
             onChanged: (value) {
               setState(() {
@@ -117,7 +119,7 @@ class _InventoryFormState extends State<InventoryForm> {
             dropdownColor: colorScheme.primaryContainer,
 
             items: InventoryUse.values
-                .map((use) => buildDropdownItem(use.name, use.text))
+                .map((use) => buildDropdownItem(use, use.text))
                 .toList(),
             onChanged: (value) {
               setState(() {
@@ -140,7 +142,7 @@ class _InventoryFormState extends State<InventoryForm> {
     );
   }
 
-  DropdownMenuItem buildDropdownItem(String value, String displayText) {
+  DropdownMenuItem buildDropdownItem(Enum value, String displayText) {
     return DropdownMenuItem(value: value, child: Text(displayText));
   }
 
@@ -220,6 +222,9 @@ class _InventoryFormState extends State<InventoryForm> {
       gColor: convertColorToInt(_selectedColor.g),
       bColor: convertColorToInt(_selectedColor.b),
     );
+
+    final inventoryNotifier = ref.read(inventoryProvider.notifier);
+    inventoryNotifier.addInventory(newInventory);
   }
 
   int convertColorToInt(double value) {
