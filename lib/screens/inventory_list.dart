@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/data/models/inventory.dart';
 import 'package:ethircle_blk_app/data/providers/inventory_provider.dart';
 import 'package:ethircle_blk_app/widgets/inventory_card.dart';
 
@@ -15,6 +16,7 @@ class InventoryList extends ConsumerStatefulWidget {
 
 class _InventoryListState extends ConsumerState {
   late Future<void> _loadInventoriesFuture;
+  var _searchText = "";
 
   @override
   void initState() {
@@ -44,30 +46,64 @@ class _InventoryListState extends ConsumerState {
                   return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (inventories.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No inventories added yet.',
+                      style: textTheme.bodyMedium,
+                    ),
+                  );
                 } else {
-                  return inventories.isEmpty
-                      ? Center(
-                          child: Text(
-                            'No inventories added yet.',
-                            style: textTheme.bodyMedium,
-                          ),
-                        )
-                      : ListView.separated(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: inventories.length,
-                          itemBuilder: (context, index) {
-                            return InventoryCard(inventory: inventories[index]);
-                          },
-                          separatorBuilder: (context, index) =>
-                              SizedBox(height: 8),
-                        );
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildSearchField(),
+                      const SizedBox(height: 16),
+                      buildInventoryList(inventories),
+                    ],
+                  );
                 }
               },
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildSearchField() {
+    return TextField(
+      decoration: InputDecoration(
+        hintText: 'Search Inventories',
+        prefixIcon: Icon(Icons.search),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+      ),
+      onChanged: (value) {
+        setState(() {
+          _searchText = value;
+        });
+      },
+    );
+  }
+
+  Widget buildInventoryList(List<Inventory> inventories) {
+    final displayedInventories = _searchText.isEmpty
+        ? inventories
+        : inventories
+              .where(
+                (inv) =>
+                    inv.name.toLowerCase().contains(_searchText.toLowerCase()),
+              )
+              .toList();
+
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: displayedInventories.length,
+      itemBuilder: (context, index) {
+        return InventoryCard(inventory: displayedInventories[index]);
+      },
+      separatorBuilder: (context, index) => SizedBox(height: 8),
     );
   }
 }
