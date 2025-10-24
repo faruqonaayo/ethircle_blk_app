@@ -18,6 +18,7 @@ class LocalDb {
 
   Future<Database> _initDb() async {
     String path = join(await getDatabasesPath(), 'blk_database.db');
+    // deleteDatabase(path); // For development purposes; remove in production
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
@@ -32,14 +33,14 @@ class LocalDb {
 
     await db.execute('''
       CREATE TABLE inventories (
-        id INTEGER PRIMARY KEY,
+        id TEEXT PRIMARY KEY,
         name TEXT,
         description TEXT,
         type TEXT,
         use TEXT,
         rColor INTEGER,
         gColor INTEGER,
-        bColor INTEGER,
+        bColor INTEGER
       )
     ''');
   }

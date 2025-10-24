@@ -1,4 +1,3 @@
-import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:ethircle_blk_app/data/database/local_db.dart';
@@ -30,9 +29,33 @@ class InventoryService {
     );
   }
 
-  final _localDb = LocalDb();
+  static final _localDb = LocalDb();
 
-  Future<void> addInventory(Inventory inventory) async {
+  static Future<List<Inventory>> getAllInventories() async {
+    final db = await _localDb.database;
+    final List<Map<String, dynamic>> maps = await db.query('inventories');
+
+    return List.generate(maps.length, (i) {
+      return Inventory(
+        id: maps[i]['id'],
+        name: maps[i]['name'],
+        description: maps[i]['description'],
+        type: InventoryType.values.firstWhere(
+          (e) => e.name == maps[i]['type'],
+          orElse: () => InventoryType.consumable,
+        ),
+        use: InventoryUse.values.firstWhere(
+          (e) => e.name == maps[i]['use'],
+          orElse: () => InventoryUse.personal,
+        ),
+        rColor: maps[i]['rColor'],
+        gColor: maps[i]['gColor'],
+        bColor: maps[i]['bColor'],
+      );
+    });
+  }
+
+  static Future<void> addInventory(Inventory inventory) async {
     final db = await _localDb.database;
 
     try {

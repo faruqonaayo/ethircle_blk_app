@@ -223,8 +223,19 @@ class _InventoryFormState extends ConsumerState<InventoryForm> {
       bColor: convertColorToInt(_selectedColor.b),
     );
 
+    // saving the new inventory to the state management
     final inventoryNotifier = ref.read(inventoryProvider.notifier);
     inventoryNotifier.addInventory(newInventory);
+
+    // Adding the new inventory to the database for persistence
+    InventoryService.addInventory(newInventory);
+
+    // showing user the success message
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Inventory Created Successfully!")));
+
+    formState.reset();
   }
 
   int convertColorToInt(double value) {

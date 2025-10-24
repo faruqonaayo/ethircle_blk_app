@@ -57,6 +57,15 @@ class BlkApp extends StatelessWidget {
         selectedItemColor: colorScheme.primary,
         unselectedItemColor: colorScheme.onSurfaceVariant,
       ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: colorScheme.primaryContainer,
+        contentTextStyle: GoogleFonts.poppins(
+          color: colorScheme.onPrimaryContainer,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+        actionTextColor: colorScheme.onPrimaryContainer,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: colorScheme.primary,
