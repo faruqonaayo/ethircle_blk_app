@@ -49,6 +49,8 @@ class InventoryCard extends StatelessWidget {
           ),
           title: Text(
             inventory.name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: textTheme.titleSmall!.copyWith(color: inventoryTypeColor),
           ),
           trailing: Icon(Icons.chevron_right, color: inventoryTypeColor),

@@ -78,6 +78,21 @@ class BlkApp extends StatelessWidget {
         ),
       ),
       textTheme: GoogleFonts.poppinsTextTheme().copyWith(
+        headlineLarge: GoogleFonts.poppins(
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+          color: colorScheme.onSurface,
+        ),
+        headlineMedium: GoogleFonts.poppins(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+          color: colorScheme.onSurface,
+        ),
+        headlineSmall: GoogleFonts.poppins(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: colorScheme.onSurface,
+        ),
         titleLarge: GoogleFonts.poppins(
           fontSize: 20,
           fontWeight: FontWeight.w600,

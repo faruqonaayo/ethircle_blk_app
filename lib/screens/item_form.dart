@@ -37,10 +37,7 @@ class _ItemFormState extends State<ItemForm> {
       children: [
         Text(
           "Hey!",
-          style: textTheme.headlineLarge!.copyWith(
-            color: colorScheme.primary,
-            fontWeight: FontWeight.w600,
-          ),
+          style: textTheme.headlineLarge!.copyWith(color: colorScheme.primary),
         ),
         SizedBox(height: 8),
         Text(

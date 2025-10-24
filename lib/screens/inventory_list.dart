@@ -31,14 +31,22 @@ class _InventoryListState extends ConsumerState {
     final inventories = ref.watch(inventoryProvider);
 
     final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Inventory List', style: textTheme.titleMedium),
-            const SizedBox(height: 16),
+            Text('Inventories', style: textTheme.headlineLarge),
+            const SizedBox(height: 2),
+            Text(
+              'Manage your inventories below. You can add, edit, or delete inventories as needed.',
+              style: textTheme.bodySmall!.copyWith(
+                color: colorScheme.secondary,
+              ),
+            ),
+            const SizedBox(height: 32),
             FutureBuilder(
               future: _loadInventoriesFuture,
               builder: (context, snapshot) {
