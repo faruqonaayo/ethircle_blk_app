@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -7,7 +8,7 @@ import 'package:ethircle_blk_app/screens/item_form.dart';
 import 'package:ethircle_blk_app/app_layout.dart';
 
 void main() {
-  runApp(BlkApp());
+  runApp(ProviderScope(child: BlkApp()));
 }
 
 var kColorScheme = ColorScheme.fromSeed(
