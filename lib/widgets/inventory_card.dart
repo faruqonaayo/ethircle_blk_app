@@ -11,6 +11,13 @@ class InventoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final inventoryTypeColor = inventory.type.color;
+    final inventoryColor = Color.fromARGB(
+      255,
+      inventory.rColor,
+      inventory.gColor,
+      inventory.bColor,
+    );
+
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
@@ -38,7 +45,7 @@ class InventoryCard extends StatelessWidget {
           leading: Icon(
             inventory.use.icon,
             size: 18,
-            color: inventoryTypeColor.withValues(alpha: 0.6),
+            color: inventoryColor.withValues(alpha: 0.6),
           ),
           title: Text(
             inventory.name,
