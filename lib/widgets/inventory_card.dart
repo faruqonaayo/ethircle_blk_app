@@ -1,7 +1,8 @@
-import 'package:ethircle_blk_app/widgets/confirm_delete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:ethircle_blk_app/widgets/confirm_delete.dart';
 import 'package:ethircle_blk_app/data/providers/inventory_provider.dart';
 import 'package:ethircle_blk_app/data/services/inventory_service.dart';
 import 'package:ethircle_blk_app/data/models/inventory.dart';
@@ -97,7 +98,9 @@ class InventoryCard extends ConsumerWidget {
               style: textTheme.titleSmall!.copyWith(color: inventoryTypeColor),
             ),
             trailing: Icon(Icons.chevron_right, color: inventoryTypeColor),
-            onTap: () {},
+            onTap: () {
+              context.push("/inventory/${inventory.id}");
+            },
           ),
         ),
       ),

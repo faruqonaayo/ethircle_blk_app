@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:ethircle_blk_app/screens/inventory_list.dart';
+import 'package:ethircle_blk_app/screens/inventory/inventory_list.dart';
 import 'package:ethircle_blk_app/widgets/add_options.dart';
 
 class AppLayout extends StatefulWidget {

@@ -23,6 +23,16 @@ class InventoryNotifier extends Notifier<List<Inventory>> {
   void removeInventory(String id) {
     state = state.where((inventory) => inventory.id != id).toList();
   }
+
+  Inventory? findInventory(String? id) {
+    if (id == null) return null;
+
+    final filteredInventory = state
+        .where((inventory) => inventory.id == id)
+        .toList();
+
+    return filteredInventory[0];
+  }
 }
 
 final inventoryProvider = NotifierProvider<InventoryNotifier, List<Inventory>>(

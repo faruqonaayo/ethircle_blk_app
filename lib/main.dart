@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:ethircle_blk_app/screens/inventory_form.dart';
+import 'package:ethircle_blk_app/screens/inventory/inventory_details.dart';
+import 'package:ethircle_blk_app/screens/inventory/inventory_form.dart';
 import 'package:ethircle_blk_app/screens/item_form.dart';
 import 'package:ethircle_blk_app/app_layout.dart';
 
@@ -30,6 +31,11 @@ class BlkApp extends StatelessWidget {
       GoRoute(path: "/", builder: (ctx, state) => AppLayout()),
       GoRoute(path: "/new-item", builder: (ctx, state) => ItemForm()),
       GoRoute(path: "/new-inventory", builder: (ctx, state) => InventoryForm()),
+      GoRoute(
+        path: "/inventory/:id",
+        builder: (ctx, state) =>
+            InventoryDetails(inventoryId: state.pathParameters["id"]),
+      ),
     ],
   );
 
