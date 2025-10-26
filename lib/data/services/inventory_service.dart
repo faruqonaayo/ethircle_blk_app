@@ -75,4 +75,20 @@ class InventoryService {
       return;
     }
   }
+
+  static Future<void> deleteInventory(String id) async {
+    final db = await _localDb.database;
+
+    try {
+      await db.delete(
+        'inventories',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+      return;
+    } catch (e) {
+      print("Error deleting inventory: $e");
+      return;
+    }
+  }
 }
