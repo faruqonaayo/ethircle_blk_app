@@ -36,6 +36,11 @@ class BlkApp extends StatelessWidget {
         builder: (ctx, state) =>
             InventoryDetails(inventoryId: state.pathParameters["id"]),
       ),
+      GoRoute(
+        path: "/edit-inventory/:id",
+        builder: (ctx, state) =>
+            InventoryForm(isEditingId: state.pathParameters["id"]),
+      ),
     ],
   );
 

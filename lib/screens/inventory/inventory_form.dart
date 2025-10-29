@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:ethircle_blk_app/data/providers/inventory_provider.dart';
 import 'package:ethircle_blk_app/data/services/inventory_service.dart';
@@ -9,7 +10,9 @@ import 'package:ethircle_blk_app/data/models/inventory_use.dart';
 import 'package:ethircle_blk_app/widgets/input_field.dart';
 
 class InventoryForm extends ConsumerStatefulWidget {
-  const InventoryForm({super.key});
+  const InventoryForm({super.key, this.isEditingId});
+
+  final String? isEditingId;
 
   @override
   ConsumerState<InventoryForm> createState() => _InventoryFormState();
@@ -22,6 +25,32 @@ class _InventoryFormState extends ConsumerState<InventoryForm> {
   Color _selectedColor = Colors.cyan;
   var _enteredName = "";
   var _enteredDescription = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.isEditingId != null) {
+      final inventoryNotifier = ref.read(inventoryProvider.notifier);
+      final inventoryToEdit = inventoryNotifier.findInventory(
+        widget.isEditingId!,
+      );
+
+      if (inventoryToEdit == null) {
+        return;
+      }
+      _enteredName = inventoryToEdit.name;
+      _enteredDescription = inventoryToEdit.description;
+      _selectedType = inventoryToEdit.type;
+      _selectedUse = inventoryToEdit.use;
+      _selectedColor = Color.fromRGBO(
+        inventoryToEdit.rColor,
+        inventoryToEdit.gColor,
+        inventoryToEdit.bColor,
+        1,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,8 +160,12 @@ class _InventoryFormState extends ConsumerState<InventoryForm> {
             style: ElevatedButton.styleFrom(
               minimumSize: Size(double.infinity, 48),
             ),
-            label: Text("Create Inventory"),
-            icon: Icon(Icons.add),
+            label: Text(
+              widget.isEditingId != null
+                  ? "Update Inventory"
+                  : "Create Inventory",
+            ),
+            icon: Icon(widget.isEditingId != null ? Icons.edit : Icons.add),
           ),
         ],
       ),
@@ -210,27 +243,56 @@ class _InventoryFormState extends ConsumerState<InventoryForm> {
 
     formState.save();
 
-    final newInventory = InventoryService.createNewInventory(
-      name: _enteredName,
-      description: _enteredDescription,
-      type: _selectedType,
-      use: _selectedUse,
-      rColor: convertColorToInt(_selectedColor.r),
-      gColor: convertColorToInt(_selectedColor.g),
-      bColor: convertColorToInt(_selectedColor.b),
-    );
+    final inventoryDataToSave = widget.isEditingId == null
+        ? InventoryService.createNewInventory(
+            name: _enteredName,
+            description: _enteredDescription,
+            type: _selectedType,
+            use: _selectedUse,
+            rColor: convertColorToInt(_selectedColor.r),
+            gColor: convertColorToInt(_selectedColor.g),
+            bColor: convertColorToInt(_selectedColor.b),
+          )
+        : InventoryService.createUpdatedInventory(
+            id: widget.isEditingId!,
+            name: _enteredName,
+            description: _enteredDescription,
+            type: _selectedType,
+            use: _selectedUse,
+            rColor: convertColorToInt(_selectedColor.r),
+            gColor: convertColorToInt(_selectedColor.g),
+            bColor: convertColorToInt(_selectedColor.b),
+          );
 
-    // saving the new inventory to the state management
     final inventoryNotifier = ref.read(inventoryProvider.notifier);
-    inventoryNotifier.addInventory(newInventory);
+    if (widget.isEditingId == null) {
+      // saving the new inventory to the state management
+      inventoryNotifier.addInventory(inventoryDataToSave);
 
-    // Adding the new inventory to the database for persistence
-    InventoryService.addInventory(newInventory);
+      // Adding the new inventory to the database for persistence
+      InventoryService.addInventory(inventoryDataToSave);
+    } else {
+      // updating the inventory in the state management
+      inventoryNotifier.updateInventory(inventoryDataToSave);
+
+      // Updating the inventory in the database for persistence
+      InventoryService.updateInventory(inventoryDataToSave);
+    }
 
     // showing user the success message
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Inventory Created Successfully!")));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          widget.isEditingId == null
+              ? "Inventory Created Successfully!"
+              : "Inventory Updated Successfully!",
+        ),
+      ),
+    );
+
+    if (widget.isEditingId != null) {
+      context.pop(true);
+    }
 
     formState.reset();
   }

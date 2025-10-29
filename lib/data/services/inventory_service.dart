@@ -29,6 +29,28 @@ class InventoryService {
     );
   }
 
+  static Inventory createUpdatedInventory({
+    required String id,
+    required String name,
+    required String description,
+    required InventoryType type,
+    required InventoryUse use,
+    required int rColor,
+    required int gColor,
+    required int bColor,
+  }) {
+    return Inventory(
+      id: id,
+      name: name,
+      description: description,
+      type: type,
+      use: use,
+      rColor: rColor,
+      gColor: gColor,
+      bColor: bColor,
+    );
+  }
+
   static final _localDb = LocalDb();
 
   static Future<List<Inventory>> getAllInventories() async {
@@ -80,14 +102,35 @@ class InventoryService {
     final db = await _localDb.database;
 
     try {
-      await db.delete(
-        'inventories',
-        where: 'id = ?',
-        whereArgs: [id],
-      );
+      await db.delete('inventories', where: 'id = ?', whereArgs: [id]);
       return;
     } catch (e) {
       print("Error deleting inventory: $e");
+      return;
+    }
+  }
+
+  static Future<void> updateInventory(Inventory inventory) async {
+    final db = await _localDb.database;
+
+    try {
+      await db.update(
+        'inventories',
+        {
+          'name': inventory.name,
+          'description': inventory.description,
+          'type': inventory.type.name,
+          'use': inventory.use.name,
+          'rColor': inventory.rColor,
+          'gColor': inventory.gColor,
+          'bColor': inventory.bColor,
+        },
+        where: 'id = ?',
+        whereArgs: [inventory.id],
+      );
+      return;
+    } catch (e) {
+      print("Error updating inventory: $e");
       return;
     }
   }

@@ -24,6 +24,16 @@ class InventoryNotifier extends Notifier<List<Inventory>> {
     state = state.where((inventory) => inventory.id != id).toList();
   }
 
+  void updateInventory(Inventory updatedInventory) {
+    state = [
+      for (final inventory in state)
+        if (inventory.id == updatedInventory.id)
+          updatedInventory
+        else
+          inventory,
+    ];
+  }
+
   Inventory? findInventory(String? id) {
     if (id == null) return null;
 
