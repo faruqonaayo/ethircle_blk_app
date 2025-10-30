@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:ethircle_blk_app/data/models/inventory.dart';
+import 'package:ethircle_blk_app/data/providers/item_provider.dart';
+import 'package:ethircle_blk_app/data/services/item_service.dart';
+import 'package:ethircle_blk_app/data/models/inventory/inventory.dart';
 import 'package:ethircle_blk_app/data/providers/inventory_provider.dart';
-import 'package:ethircle_blk_app/data/models/measure_unit.dart';
+import 'package:ethircle_blk_app/data/models/item/measure_unit.dart';
 import 'package:ethircle_blk_app/widgets/input_field.dart';
 
 class ItemForm extends ConsumerStatefulWidget {
@@ -14,11 +16,12 @@ class ItemForm extends ConsumerStatefulWidget {
 }
 
 class _ItemFormState extends ConsumerState<ItemForm> {
+  final _formKey = GlobalKey<FormState>();
   var _selectedUnit = MeasureUnit.values.first;
   var _enteredName = "";
   var _enteredDescription = "";
-  var _enteredMeasurementValue = "";
-  var _enteredPricePerUnit = "";
+  double _enteredMeasurementValue = 0.0;
+  double _enteredPricePerUnit = 0.0;
   Inventory? _selectedInventory = null;
   late List<Inventory> _inventories;
 
@@ -36,15 +39,15 @@ class _ItemFormState extends ConsumerState<ItemForm> {
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         children: [
-          pageHeader(context),
+          _pageHeader(context),
           SizedBox(height: 24),
-          pageForm(context),
+          _pageForm(context),
         ],
       ),
     );
   }
 
-  Widget pageHeader(BuildContext context) {
+  Widget _pageHeader(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     return Column(
@@ -66,22 +69,41 @@ class _ItemFormState extends ConsumerState<ItemForm> {
     );
   }
 
-  Widget pageForm(BuildContext context) {
+  Widget _pageForm(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Form(
+      key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 16,
         children: [
-          InputField(label: "Item Name"),
-          InputField(minLines: 3, maxLines: 5, label: "Item Description"),
+          InputField(
+            label: "Item Name",
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return "Enter a Name";
+              }
+              return null;
+            },
+            onSaved: (newValue) {
+              _enteredName = newValue!.trim();
+            },
+          ),
+          InputField(
+            minLines: 3,
+            maxLines: 5,
+            label: "Item Description",
+            onSaved: (newValue) {
+              _enteredDescription = newValue!.trim();
+            },
+          ),
           DropdownButtonFormField(
             initialValue: _selectedUnit,
             decoration: InputDecoration(labelText: "Measure Unit"),
             dropdownColor: colorScheme.primaryContainer,
 
             items: MeasureUnit.values
-                .map((unit) => buildDropdownItem(unit, unit.text))
+                .map((unit) => _buildDropdownItem(unit, unit.text))
                 .toList(),
             onChanged: (value) {
               setState(() {
@@ -90,13 +112,34 @@ class _ItemFormState extends ConsumerState<ItemForm> {
             },
           ),
           InputField(
+            initialValue: _enteredMeasurementValue.toString(),
             keyboardType: TextInputType.number,
             label: "Measurement Value",
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return "Enter a Measurement Value";
+              }
+              return null;
+            },
+            onSaved: (newValue) {
+              _enteredMeasurementValue =
+                  double.tryParse(newValue!.trim()) ?? 0.0;
+            },
           ),
           InputField(
+            initialValue: _enteredPricePerUnit.toString(),
             keyboardType: TextInputType.number,
             label: "Price per Unit",
             prefixText: "\$ ",
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return "Enter a Price per Unit";
+              }
+              return null;
+            },
+            onSaved: (newValue) {
+              _enteredPricePerUnit = double.tryParse(newValue!.trim()) ?? 0.0;
+            },
           ),
           DropdownButtonFormField(
             initialValue: null,
@@ -105,7 +148,7 @@ class _ItemFormState extends ConsumerState<ItemForm> {
             items: [
               DropdownMenuItem(value: null, child: Text("Select Inventory")),
               ..._inventories.map(
-                (inventory) => buildDropdownItem(inventory, inventory.name),
+                (inventory) => _buildDropdownItem(inventory, inventory.name),
               ),
             ],
             onChanged: (value) {
@@ -117,7 +160,7 @@ class _ItemFormState extends ConsumerState<ItemForm> {
 
           const SizedBox(height: 24),
           ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: _onSubmit,
             style: ElevatedButton.styleFrom(
               minimumSize: Size(double.infinity, 48),
             ),
@@ -129,7 +172,40 @@ class _ItemFormState extends ConsumerState<ItemForm> {
     );
   }
 
-  DropdownMenuItem buildDropdownItem(Object value, String displayText) {
+  DropdownMenuItem _buildDropdownItem(Object value, String displayText) {
     return DropdownMenuItem(value: value, child: Text(displayText));
+  }
+
+  void _onSubmit() {
+    final formState = _formKey.currentState!;
+    if (!formState.validate()) {
+      return;
+    }
+
+    _formKey.currentState!.save();
+
+    final newItem = ItemService.createNewItem(
+      name: _enteredName,
+      description: _enteredDescription,
+      measureUnit: _selectedUnit,
+      measurementValue: _enteredMeasurementValue,
+      pricePerUnit: _enteredPricePerUnit,
+      inventoryId: _selectedInventory?.id,
+    );
+
+    final itemNotifier = ref.read(itemProvider.notifier);
+
+    // updating state
+    itemNotifier.addItem(newItem);
+
+    // adding to database
+    ItemService.addItem(newItem);
+
+    // showing user the success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Item '${newItem.name}' added successfully!")),
+    );
+
+    formState.reset();
   }
 }

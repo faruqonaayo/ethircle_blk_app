@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:ethircle_blk_app/data/models/inventory.dart';
+import 'package:ethircle_blk_app/data/models/inventory/inventory.dart';
 import 'package:ethircle_blk_app/data/providers/inventory_provider.dart';
 
 class InventoryDetails extends ConsumerStatefulWidget {

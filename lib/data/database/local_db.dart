@@ -23,17 +23,9 @@ class LocalDb {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    // await db.execute('''
-    //   CREATE TABLE items (
-    //     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    //     name TEXT,
-    //     description TEXT
-    //   )
-    // ''');
-
     await db.execute('''
       CREATE TABLE inventories (
-        id TEEXT PRIMARY KEY,
+        id TEXT PRIMARY KEY,
         name TEXT,
         description TEXT,
         type TEXT,
@@ -41,6 +33,19 @@ class LocalDb {
         rColor INTEGER,
         gColor INTEGER,
         bColor INTEGER
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE items (
+        id TEXT PRIMARY KEY,
+        name TEXT,
+        description TEXT,
+        measureUnit TEXT,
+        measurementValue REAL,
+        pricePerUnit REAL,
+        inventoryId TEXT,
+        FOREIGN KEY (inventoryId) REFERENCES inventories (id) 
       )
     ''');
   }

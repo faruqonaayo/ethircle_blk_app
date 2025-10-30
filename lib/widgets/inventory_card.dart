@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ethircle_blk_app/widgets/confirm_delete.dart';
 import 'package:ethircle_blk_app/data/providers/inventory_provider.dart';
 import 'package:ethircle_blk_app/data/services/inventory_service.dart';
-import 'package:ethircle_blk_app/data/models/inventory.dart';
+import 'package:ethircle_blk_app/data/models/inventory/inventory.dart';
 
 class InventoryCard extends ConsumerWidget {
   final Inventory inventory;

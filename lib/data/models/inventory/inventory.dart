@@ -1,5 +1,5 @@
-import 'package:ethircle_blk_app/data/models/inventory_type.dart';
-import 'package:ethircle_blk_app/data/models/inventory_use.dart';
+import 'package:ethircle_blk_app/data/models/inventory/inventory_type.dart';
+import 'package:ethircle_blk_app/data/models/inventory/inventory_use.dart';
 
 class Inventory {
   final String id;

@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 
 import 'package:ethircle_blk_app/data/providers/inventory_provider.dart';
 import 'package:ethircle_blk_app/data/services/inventory_service.dart';
-import 'package:ethircle_blk_app/data/models/inventory_type.dart';
-import 'package:ethircle_blk_app/data/models/inventory_use.dart';
+import 'package:ethircle_blk_app/data/models/inventory/inventory_type.dart';
+import 'package:ethircle_blk_app/data/models/inventory/inventory_use.dart';
 import 'package:ethircle_blk_app/widgets/input_field.dart';
 
 class InventoryForm extends ConsumerStatefulWidget {
@@ -59,15 +59,15 @@ class _InventoryFormState extends ConsumerState<InventoryForm> {
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         children: [
-          pageHeader(context),
+          _pageHeader(context),
           SizedBox(height: 24),
-          pageForm(context),
+          _pageForm(context),
         ],
       ),
     );
   }
 
-  Widget pageHeader(BuildContext context) {
+  Widget _pageHeader(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     return Column(
@@ -89,7 +89,7 @@ class _InventoryFormState extends ConsumerState<InventoryForm> {
     );
   }
 
-  Widget pageForm(BuildContext context) {
+  Widget _pageForm(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Form(
       key: _formKey,
@@ -153,10 +153,10 @@ class _InventoryFormState extends ConsumerState<InventoryForm> {
               });
             },
           ),
-          buildColorField(context),
+          _buildColorField(context),
           const SizedBox(height: 24),
           ElevatedButton.icon(
-            onPressed: onSubmit,
+            onPressed: _onSubmit,
             style: ElevatedButton.styleFrom(
               minimumSize: Size(double.infinity, 48),
             ),
@@ -176,7 +176,7 @@ class _InventoryFormState extends ConsumerState<InventoryForm> {
     return DropdownMenuItem(value: value, child: Text(displayText));
   }
 
-  Widget buildColorField(BuildContext context) {
+  Widget _buildColorField(BuildContext context) {
     return Row(
       spacing: 16,
       children: [
@@ -188,7 +188,7 @@ class _InventoryFormState extends ConsumerState<InventoryForm> {
           ),
         ),
         GestureDetector(
-          onTap: showColorPickerWidget,
+          onTap: _showColorPickerWidget,
           child: Container(
             width: 32,
             height: 32,
@@ -202,7 +202,7 @@ class _InventoryFormState extends ConsumerState<InventoryForm> {
     );
   }
 
-  void showColorPickerWidget() {
+  void _showColorPickerWidget() {
     showDialog(
       context: context,
 
@@ -235,7 +235,7 @@ class _InventoryFormState extends ConsumerState<InventoryForm> {
     );
   }
 
-  void onSubmit() {
+  void _onSubmit() {
     final formState = _formKey.currentState!;
     if (!formState.validate()) {
       return;

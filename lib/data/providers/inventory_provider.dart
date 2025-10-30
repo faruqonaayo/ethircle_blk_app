@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:ethircle_blk_app/data/services/inventory_service.dart';
-import 'package:ethircle_blk_app/data/models/inventory.dart';
+import 'package:ethircle_blk_app/data/models/inventory/inventory.dart';
 
 class InventoryNotifier extends Notifier<List<Inventory>> {
   @override

@@ -1,11 +1,11 @@
 import 'package:uuid/uuid.dart';
 
 import 'package:ethircle_blk_app/data/database/local_db.dart';
-import 'package:ethircle_blk_app/data/models/inventory_type.dart';
-import 'package:ethircle_blk_app/data/models/inventory_use.dart';
-import 'package:ethircle_blk_app/data/models/inventory.dart';
+import 'package:ethircle_blk_app/data/models/inventory/inventory_type.dart';
+import 'package:ethircle_blk_app/data/models/inventory/inventory_use.dart';
+import 'package:ethircle_blk_app/data/models/inventory/inventory.dart';
 
-final uuid = Uuid();
+ final uuid = Uuid();
 
 class InventoryService {
   static Inventory createNewInventory({
