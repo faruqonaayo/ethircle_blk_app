@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:ethircle_blk_app/data/providers/item_provider.dart';
 import 'package:ethircle_blk_app/data/models/inventory/inventory.dart';
 import 'package:ethircle_blk_app/data/providers/inventory_provider.dart';
 
@@ -63,22 +64,26 @@ class _InventoryDetailsState extends ConsumerState<InventoryDetails> {
       ),
       body: widget.inventoryId == null
           ? Center(child: Text("No Inventory Found"))
-          : buildCategoryDetails(_inventory!),
+          : _buildCategoryDetails(_inventory!),
     );
   }
 
-  Widget buildCategoryDetails(Inventory inventory) {
+  Widget _buildCategoryDetails(Inventory inventory) {
+    final inventoryItems = ref
+        .read(itemProvider.notifier)
+        .findItemsByInventoryId(_inventory?.id);
+
     return ListView(
       padding: EdgeInsets.all(16),
       children: [
-        buildPageHeader(inventory),
+        _buildPageHeader(inventory),
         const SizedBox(height: 32),
-        Text("List of Items"),
+        ...inventoryItems.map((item) => ListTile(title: Text(item.name))),
       ],
     );
   }
 
-  Widget buildPageHeader(Inventory inventory) {
+  Widget _buildPageHeader(Inventory inventory) {
     final textTheme = Theme.of(context).textTheme;
     return Text(
       inventory.name,
