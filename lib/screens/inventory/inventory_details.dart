@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -78,7 +80,19 @@ class _InventoryDetailsState extends ConsumerState<InventoryDetails> {
       children: [
         _buildPageHeader(inventory),
         const SizedBox(height: 32),
-        ...inventoryItems.map((item) => ListTile(title: Text(item.name))),
+        ...inventoryItems.map(
+          (item) => ListTile(
+            leading: item.imagePath != null
+                ? Image.file(
+                    File(item.imagePath!),
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  )
+                : Icon(Icons.inventory_2),
+            title: Text(item.name),
+          ),
+        ),
       ],
     );
   }

@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart' as sys_path;
+import 'package:path/path.dart' as path;
+
 import 'package:ethircle_blk_app/data/database/local_db.dart';
 import 'package:ethircle_blk_app/data/services/inventory_service.dart';
 import 'package:ethircle_blk_app/data/models/item/item.dart';
@@ -11,6 +16,7 @@ class ItemService {
     required double measurementValue,
     required double pricePerUnit,
     String? inventoryId,
+    String? imagePath,
   }) {
     return Item(
       id: uuid.v4(),
@@ -20,6 +26,7 @@ class ItemService {
       measurementValue: measurementValue,
       pricePerUnit: pricePerUnit,
       inventoryId: inventoryId,
+      imagePath: imagePath,
     );
   }
 
@@ -31,6 +38,7 @@ class ItemService {
     required double measurementValue,
     required double pricePerUnit,
     String? inventoryId,
+    String? imagePath,
   }) {
     return Item(
       id: id,
@@ -40,6 +48,7 @@ class ItemService {
       measurementValue: measurementValue,
       pricePerUnit: pricePerUnit,
       inventoryId: inventoryId,
+      imagePath: imagePath,
     );
   }
 
@@ -60,6 +69,7 @@ class ItemService {
         measurementValue: maps[i]['measurementValue'] as double,
         pricePerUnit: maps[i]['pricePerUnit'] as double,
         inventoryId: maps[i]['inventoryId'],
+        imagePath: maps[i]['imagePath'],
       );
     });
   }
@@ -76,9 +86,36 @@ class ItemService {
         'pricePerUnit': item.pricePerUnit,
         'inventoryId': item.inventoryId,
       });
+
+      if (item.imagePath != null) {
+        await _saveItemImage(item.id, item.imagePath!);
+      }
     } catch (e) {
       print('Error adding item: $e');
       return;
+    }
+  }
+
+  static Future<String> _saveItemImage(String itemId, String imagePath) async {
+    final directory = await sys_path.getApplicationDocumentsDirectory();
+    final extension = path.extension(path.basename(imagePath));
+    final fileName = '${itemId}_image$extension';
+    final newPath = '${directory.path}/$fileName';
+    final imageFile = File(imagePath);
+    await imageFile.copy(newPath);
+
+    final db = await _localDb.database;
+    try {
+      await db.update(
+        'items',
+        {'imagePath': newPath},
+        where: 'id = ?',
+        whereArgs: [itemId],
+      );
+      return newPath;
+    } catch (e) {
+      print('Error saving item image: $e');
+      throw Exception('Failed to save item image');
     }
   }
 }

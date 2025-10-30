@@ -8,6 +8,7 @@ class Item {
   final double measurementValue;
   final double pricePerUnit;
   final String? inventoryId;
+  final String? imagePath;
 
   const Item({
     required this.id,
@@ -17,5 +18,6 @@ class Item {
     required this.measurementValue,
     required this.pricePerUnit,
     this.inventoryId,
+    this.imagePath,
   });
 }

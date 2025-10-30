@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/widgets/image_field.dart';
 import 'package:ethircle_blk_app/data/providers/item_provider.dart';
 import 'package:ethircle_blk_app/data/services/item_service.dart';
 import 'package:ethircle_blk_app/data/models/inventory/inventory.dart';
@@ -23,6 +26,7 @@ class _ItemFormState extends ConsumerState<ItemForm> {
   double _enteredMeasurementValue = 0.0;
   double _enteredPricePerUnit = 0.0;
   Inventory? _selectedInventory = null;
+  File? _selectedImage;
   late List<Inventory> _inventories;
 
   @override
@@ -157,6 +161,13 @@ class _ItemFormState extends ConsumerState<ItemForm> {
               });
             },
           ),
+          ImageField(
+            onImageSelected: (image) {
+              setState(() {
+                _selectedImage = image;
+              });
+            },
+          ),
 
           const SizedBox(height: 24),
           ElevatedButton.icon(
@@ -191,6 +202,7 @@ class _ItemFormState extends ConsumerState<ItemForm> {
       measurementValue: _enteredMeasurementValue,
       pricePerUnit: _enteredPricePerUnit,
       inventoryId: _selectedInventory?.id,
+      imagePath: _selectedImage?.path,
     );
 
     final itemNotifier = ref.read(itemProvider.notifier);

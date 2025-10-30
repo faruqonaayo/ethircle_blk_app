@@ -54,6 +54,7 @@ class LocalDb {
         measurementValue REAL,
         pricePerUnit REAL,
         inventoryId TEXT,
+        imagePath TEXT,
         FOREIGN KEY (inventoryId) REFERENCES inventories (id) 
       )
     ''');
