@@ -15,16 +15,7 @@ class InventoryList extends ConsumerStatefulWidget {
 }
 
 class _InventoryListState extends ConsumerState {
-  late Future<void> _loadInventoriesFuture;
   var _searchText = "";
-
-  @override
-  void initState() {
-    super.initState();
-    _loadInventoriesFuture = ref
-        .read(inventoryProvider.notifier)
-        .loadInventories();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,32 +38,21 @@ class _InventoryListState extends ConsumerState {
               ),
             ),
             const SizedBox(height: 32),
-            FutureBuilder(
-              future: _loadInventoriesFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (inventories.isEmpty) {
-                  return Center(
+            inventories.isEmpty
+                ? Center(
                     child: Text(
                       'No inventories added yet.',
                       style: textTheme.bodyMedium,
                     ),
-                  );
-                } else {
-                  return Column(
+                  )
+                : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       buildSearchField(),
                       const SizedBox(height: 16),
                       buildInventoryList(inventories),
                     ],
-                  );
-                }
-              },
-            ),
+                  ),
           ],
         ),
       ),

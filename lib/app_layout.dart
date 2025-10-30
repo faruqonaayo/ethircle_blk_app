@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/data/providers/app_data_provider.dart';
 import 'package:ethircle_blk_app/screens/inventory/inventory_list.dart';
 import 'package:ethircle_blk_app/widgets/add_options.dart';
 
-class AppLayout extends StatefulWidget {
+class AppLayout extends ConsumerStatefulWidget {
   const AppLayout({super.key});
 
   @override
-  State<AppLayout> createState() => _AppLayoutState();
+  ConsumerState<AppLayout> createState() => _AppLayoutState();
 }
 
-class _AppLayoutState extends State<AppLayout> {
+class _AppLayoutState extends ConsumerState<AppLayout> {
+  late Future<void> _loadAppDataFuture;
   var _currentPage = 0;
 
   final pages = [
@@ -20,13 +23,29 @@ class _AppLayoutState extends State<AppLayout> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _loadAppDataFuture = ref.read(appDataProvider.notifier).loadAppData();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
         title: Text('Ethircle BlkApp', style: textTheme.titleSmall),
       ),
-      body: pages[_currentPage],
+      body: FutureBuilder(
+        future: _loadAppDataFuture,
+        builder: (context, asyncSnapshot) {
+          if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (asyncSnapshot.hasError) {
+            return Center(child: Text('Error: ${asyncSnapshot.error}'));
+          }
+          return pages[_currentPage];
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: bottomBarItems,

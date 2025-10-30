@@ -48,7 +48,7 @@ class BlkApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: "Ethircle BlkApp",
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.dark,
       theme: getThemeConfig(kColorScheme),
       darkTheme: getThemeConfig(kDarkColorScheme),
       routerConfig: router,
