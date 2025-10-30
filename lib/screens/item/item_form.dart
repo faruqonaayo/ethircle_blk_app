@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/data/models/inventory.dart';
+import 'package:ethircle_blk_app/data/providers/inventory_provider.dart';
 import 'package:ethircle_blk_app/data/models/measure_unit.dart';
 import 'package:ethircle_blk_app/widgets/input_field.dart';
 
-class ItemForm extends StatefulWidget {
+class ItemForm extends ConsumerStatefulWidget {
   const ItemForm({super.key});
 
   @override
-  State<ItemForm> createState() => _ItemFormState();
+  ConsumerState<ItemForm> createState() => _ItemFormState();
 }
 
-class _ItemFormState extends State<ItemForm> {
-  var _selectedUnit = MeasureUnit.values.first.name;
+class _ItemFormState extends ConsumerState<ItemForm> {
+  var _selectedUnit = MeasureUnit.values.first;
+  var _enteredName = "";
+  var _enteredDescription = "";
+  var _enteredMeasurementValue = "";
+  var _enteredPricePerUnit = "";
+  Inventory? _selectedInventory = null;
+  late List<Inventory> _inventories;
+
+  @override
+  void initState() {
+    super.initState();
+    _inventories = ref.read(inventoryProvider);
+    _selectedInventory = _inventories.isNotEmpty ? _inventories.first : null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +81,7 @@ class _ItemFormState extends State<ItemForm> {
             dropdownColor: colorScheme.primaryContainer,
 
             items: MeasureUnit.values
-                .map((unit) => buildDropdownItem(unit.name, unit.text))
+                .map((unit) => buildDropdownItem(unit, unit.text))
                 .toList(),
             onChanged: (value) {
               setState(() {
@@ -82,6 +98,22 @@ class _ItemFormState extends State<ItemForm> {
             label: "Price per Unit",
             prefixText: "\$ ",
           ),
+          DropdownButtonFormField(
+            initialValue: null,
+            decoration: InputDecoration(labelText: "Inventory"),
+            dropdownColor: colorScheme.primaryContainer,
+            items: [
+              DropdownMenuItem(value: null, child: Text("Select Inventory")),
+              ..._inventories.map(
+                (inventory) => buildDropdownItem(inventory, inventory.name),
+              ),
+            ],
+            onChanged: (value) {
+              setState(() {
+                _selectedInventory = value;
+              });
+            },
+          ),
 
           const SizedBox(height: 24),
           ElevatedButton.icon(
@@ -97,7 +129,7 @@ class _ItemFormState extends State<ItemForm> {
     );
   }
 
-  DropdownMenuItem buildDropdownItem(String value, String displayText) {
+  DropdownMenuItem buildDropdownItem(Object value, String displayText) {
     return DropdownMenuItem(value: value, child: Text(displayText));
   }
 }

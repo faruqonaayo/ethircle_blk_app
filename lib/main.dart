@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:ethircle_blk_app/screens/inventory/inventory_details.dart';
 import 'package:ethircle_blk_app/screens/inventory/inventory_form.dart';
-import 'package:ethircle_blk_app/screens/item_form.dart';
+import 'package:ethircle_blk_app/screens/item/item_form.dart';
 import 'package:ethircle_blk_app/app_layout.dart';
 
 void main() {
@@ -48,7 +48,7 @@ class BlkApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: "Ethircle BlkApp",
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
       theme: getThemeConfig(kColorScheme),
       darkTheme: getThemeConfig(kDarkColorScheme),
       routerConfig: router,
