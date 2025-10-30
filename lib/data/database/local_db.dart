@@ -28,6 +28,7 @@ class LocalDb {
   }
 
   Future<void> _onCreate(Database db, int version) async {
+    // creating base tables
     await db.execute('''
       CREATE TABLE inventories (
         id TEXT PRIMARY KEY,
@@ -40,35 +41,10 @@ class LocalDb {
         bColor INTEGER
       )
     ''');
-
-    await db.execute('''
-      CREATE TABLE items (
-        id TEXT PRIMARY KEY,
-        name TEXT,
-        description TEXT,
-        measureUnit TEXT,
-        measurementValue REAL,
-        pricePerUnit REAL,
-        inventoryId TEXT,
-        FOREIGN KEY (inventoryId) REFERENCES inventories (id)
-      )
-    ''');
   }
 
   Future<void> _onOpen(Database db) async {
-    await db.execute('''
-      CREATE TABLE IF NOT EXISTS inventories (
-        id TEXT PRIMARY KEY,
-        name TEXT,
-        description TEXT,
-        type TEXT,
-        use TEXT,
-        rColor INTEGER,
-        gColor INTEGER,
-        bColor INTEGER
-      )
-    ''');
-
+    // creating additional tables or modifying existing ones on database open
     await db.execute('''
       CREATE TABLE IF NOT EXISTS items (
         id TEXT PRIMARY KEY,
