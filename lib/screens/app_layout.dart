@@ -1,3 +1,4 @@
+import 'package:ethircle_blk_app/widgets/add_options.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ethircle_blk_app/theme.dart';
@@ -10,9 +11,9 @@ class AppLayout extends StatefulWidget {
 }
 
 class _AppLayoutState extends State<AppLayout> {
-  var currentPage = 0;
+  var _currentPage = 0;
 
-  final pages = [
+  final _pages = [
     Center(child: Text("Home Page", style: title1)),
     null,
     Center(child: Text("Categories Page", style: title1)),
@@ -26,18 +27,18 @@ class _AppLayoutState extends State<AppLayout> {
         title: Text("BLK App", style: textTheme.bodySmall),
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.logout))],
       ),
-      body: pages[currentPage],
-      bottomNavigationBar: botNavBar,
+      body: _pages[_currentPage],
+      bottomNavigationBar: _botNavBar,
     );
   }
 
   // This function returns the bottom navigation bar
-  BottomNavigationBar get botNavBar {
+  BottomNavigationBar get _botNavBar {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(currentPage == 0 ? Icons.home : Icons.home_outlined),
+          icon: Icon(_currentPage == 0 ? Icons.home : Icons.home_outlined),
           label: "Home",
         ),
         BottomNavigationBarItem(
@@ -57,19 +58,22 @@ class _AppLayoutState extends State<AppLayout> {
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            currentPage == 2 ? Icons.category : Icons.category_outlined,
+            _currentPage == 2 ? Icons.category : Icons.category_outlined,
           ),
           label: "Categories",
         ),
       ],
-      currentIndex: currentPage,
+      currentIndex: _currentPage,
       onTap: (value) {
         if (value == 1) {
-          showModalBottomSheet(context: context, builder: (ctx) => Container());
+          showModalBottomSheet(
+            context: context,
+            builder: (ctx) => AddOptions(),
+          );
           return;
         }
         setState(() {
-          currentPage = value;
+          _currentPage = value;
         });
       },
     );
