@@ -1,7 +1,6 @@
+import 'package:ethircle_blk_app/screens/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'package:ethircle_blk_app/theme.dart';
 
 void main() {
   runApp(const BLKApp());
@@ -27,9 +26,7 @@ class BLKApp extends StatelessWidget {
       themeMode: ThemeMode.light,
       theme: getThemeData(kColorScheme),
       darkTheme: getThemeData(kDarkColorScheme),
-      home: Scaffold(
-        body: Center(child: Text("Hello BLK App", style: title1)),
-      ),
+      home: AppLayout(),
     );
   }
 
@@ -45,6 +42,9 @@ class BLKApp extends StatelessWidget {
         bodyLarge: bodyDefaultStyle.copyWith(fontSize: 18),
         bodyMedium: bodyDefaultStyle.copyWith(fontSize: 16),
         bodySmall: bodyDefaultStyle.copyWith(fontSize: 14),
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: colorScheme.surfaceContainer,
       ),
     );
   }
