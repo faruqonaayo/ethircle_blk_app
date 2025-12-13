@@ -19,5 +19,38 @@ ThemeData getThemeData(ColorScheme cs) {
       bodyColor: cs.onSurface,
       displayColor: cs.onSurface,
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: cs.primary,
+        foregroundColor: cs.onPrimary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        textStyle: GoogleFonts.poppins(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: cs.primary,
+        textStyle: GoogleFonts.poppins(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    ),
   );
 }
+
+final title1Style = GoogleFonts.lato(fontSize: 24, fontWeight: FontWeight.bold);
+
+final title2Style = GoogleFonts.poppins(
+  fontSize: 20,
+  fontWeight: FontWeight.w600,
+);
+
+final title3Style = GoogleFonts.poppins(
+  fontSize: 18,
+  fontWeight: FontWeight.w500,
+);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:ethircle_blk_app/screens/auth_screen.dart';
 import 'package:ethircle_blk_app/screens/app_layout.dart';
 import 'package:ethircle_blk_app/theme.dart';
 
@@ -13,8 +14,11 @@ class BlkApp extends StatelessWidget {
 
   // This widget is the root of your application.
   final _router = GoRouter(
-    initialLocation: '/',
-    routes: [GoRoute(path: '/', builder: (ctx, state) => AppLayout())],
+    initialLocation: '/auth',
+    routes: [
+      GoRoute(path: '/', builder: (ctx, state) => AppLayout()),
+      GoRoute(path: '/auth', builder: (ctx, state) => AuthScreen()),
+    ],
   );
 
   @override
