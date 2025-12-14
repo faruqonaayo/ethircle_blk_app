@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'package:ethircle_blk_app/services/auth_services.dart';
 import 'package:ethircle_blk_app/widgets/input_field.dart';
 
 class AuthForm extends StatefulWidget {
@@ -42,18 +42,36 @@ class _AuthFormState extends State<AuthForm> {
       return;
     }
 
-    final auth = FirebaseAuth.instance;
     // logic for user that is signing up for the first time
+    var result;
     if (!_isLogin) {
-      await auth.createUserWithEmailAndPassword(
+      result = await AuthServices.createBlkUser(
+        firstName: _enteredFirstName,
+        lastName: _enteredLastName,
         email: _enteredEmail,
         password: _enteredPassword,
       );
     } else {
       // logic for existing user logging in
-      await auth.signInWithEmailAndPassword(
+      result = await AuthServices.loginUser(
         email: _enteredEmail,
         password: _enteredPassword,
+      );
+    }
+    if (!mounted) {
+      return;
+    }
+
+    if (result['status'] == 'error') {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            result['message'] ?? 'Authentication failed.',
+            style: TextStyle(color: Theme.of(context).colorScheme.onError),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
       );
     }
   }
