@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "540169150361",
+    "project_id": "ethircle-blk-app-6a013",
+    "storage_bucket": "ethircle-blk-app-6a013.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540169150361:android:2af8bd9ae488840aac7d08",
+        "android_client_info": {
+          "package_name": "com.example.ethircle_blk_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd2cELgabVGvVWlTetDI3IzJphhVFUtAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

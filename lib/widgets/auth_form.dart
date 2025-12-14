@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ethircle_blk_app/widgets/input_field.dart';
@@ -18,7 +19,7 @@ class _AuthFormState extends State<AuthForm> {
   var _enteredPassword = '';
   var _enteredPasswordConfirm = '';
 
-  void _trySubmit() {
+  void _trySubmit() async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
@@ -39,6 +40,15 @@ class _AuthFormState extends State<AuthForm> {
         ),
       );
       return;
+    }
+
+    final auth = FirebaseAuth.instance;
+    // logic for user that is signing up for the first time
+    if (!_isLogin) {
+      await auth.createUserWithEmailAndPassword(
+        email: _enteredEmail,
+        password: _enteredPassword,
+      );
     }
   }
 
