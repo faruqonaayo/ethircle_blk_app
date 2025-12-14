@@ -49,6 +49,12 @@ class _AuthFormState extends State<AuthForm> {
         email: _enteredEmail,
         password: _enteredPassword,
       );
+    } else {
+      // logic for existing user logging in
+      await auth.signInWithEmailAndPassword(
+        email: _enteredEmail,
+        password: _enteredPassword,
+      );
     }
   }
 
