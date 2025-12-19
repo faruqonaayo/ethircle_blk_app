@@ -32,7 +32,9 @@ class BlkApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Blk App',
+      themeMode: ThemeMode.dark,
       theme: getThemeData(kColorScheme),
+      darkTheme: getThemeData(kDarkColorScheme),
       routerConfig: _router,
     );
   }

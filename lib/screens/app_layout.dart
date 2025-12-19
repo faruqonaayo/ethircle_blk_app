@@ -57,6 +57,8 @@ class _AppLayoutState extends State<AppLayout> {
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentPage,
         backgroundColor: colorScheme.surfaceContainerHigh,
+        selectedItemColor: colorScheme.primary,
+        unselectedItemColor: colorScheme.onSurfaceVariant,
         items: _buildNavItems(),
         onTap: (value) {
           setState(() {

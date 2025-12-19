@@ -39,7 +39,7 @@ class AddOptions extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              icon: Icon(Icons.close, color: colorScheme.onError),
+              icon: Icon(Icons.close, color: colorScheme.onErrorContainer),
             ),
           ),
         ],
