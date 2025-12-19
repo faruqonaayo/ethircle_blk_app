@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'package:ethircle_blk_app/widgets/add_options.dart';
 import 'package:ethircle_blk_app/screens/auth_screen.dart';
 import 'package:ethircle_blk_app/widgets/loading.dart';
 
@@ -64,7 +65,7 @@ class _AppLayoutState extends State<AppLayout> {
               showModalBottomSheet(
                 context: context,
                 builder: (ctx) {
-                  return Center(child: Text('Add New Item'));
+                  return AddOptions();
                 },
               );
 
