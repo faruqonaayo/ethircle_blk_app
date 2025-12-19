@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:ethircle_blk_app/theme.dart';
 
@@ -10,7 +11,7 @@ class AddOptions extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: EdgeInsets.all(32),
-      height: 320,
+      height: 360,
       child: Column(
         spacing: 16,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,9 +22,11 @@ class AddOptions extends StatelessWidget {
           ),
           _buildOptionTile(context, 'Add Item', Icons.emoji_objects, () {
             // Handle add item action
+            Navigator.of(context).pop();
           }),
           _buildOptionTile(context, 'Add Inventory', Icons.inventory, () {
-            // Handle add category action
+            Navigator.of(context).pop();
+            context.push("/inventory/new");
           }),
           Container(
             width: 48,
@@ -52,11 +55,13 @@ class AddOptions extends StatelessWidget {
   ) {
     final colorScheme = Theme.of(context).colorScheme;
     return ListTile(
+      contentPadding: EdgeInsets.all(8),
       leading: Icon(icon, color: colorScheme.primary),
+      trailing: Icon(Icons.chevron_right, color: colorScheme.onSurfaceVariant),
       title: Text(title, style: title3Style),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: BorderSide(width: 1, color: colorScheme.primary),
+        side: BorderSide(width: 1, color: colorScheme.surfaceContainerHighest),
       ),
       onTap: () {
         // Handle add category action

@@ -8,6 +8,7 @@ class InputField extends StatelessWidget {
     this.obscureText = false,
     required this.validatorFn,
     required this.saveFn,
+    this.maxLines = 1,
   });
 
   final String labelText;
@@ -15,6 +16,7 @@ class InputField extends StatelessWidget {
   final bool obscureText;
   final String? Function(String? value) validatorFn;
   final void Function(String? value) saveFn;
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class InputField extends StatelessWidget {
         fillColor: colorScheme.surfaceContainerHigh,
         filled: true,
       ),
+      maxLines: maxLines,
       validator: (value) {
         return validatorFn(value);
       },

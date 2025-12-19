@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+import 'package:ethircle_blk_app/screens/inventory_form_screen.dart';
 import 'package:ethircle_blk_app/screens/app_layout.dart';
 import 'package:ethircle_blk_app/theme.dart';
 
@@ -18,7 +19,13 @@ class BlkApp extends StatelessWidget {
   // This widget is the root of your application.
   final _router = GoRouter(
     initialLocation: '/',
-    routes: [GoRoute(path: '/', builder: (ctx, state) => AppLayout())],
+    routes: [
+      GoRoute(path: '/', builder: (ctx, state) => AppLayout()),
+      GoRoute(
+        path: '/inventory/new',
+        builder: (ctx, state) => InventoryFormScreen(),
+      ),
+    ],
   );
 
   @override
