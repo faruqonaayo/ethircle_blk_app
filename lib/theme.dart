@@ -54,3 +54,8 @@ final title3Style = GoogleFonts.poppins(
   fontSize: 18,
   fontWeight: FontWeight.w500,
 );
+
+final title4Style = GoogleFonts.poppins(
+  fontSize: 16,
+  fontWeight: FontWeight.w500,
+);

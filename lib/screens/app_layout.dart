@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'package:ethircle_blk_app/screens/inventory_list_screen.dart';
 import 'package:ethircle_blk_app/widgets/add_options.dart';
 
 class AppLayout extends StatefulWidget {
@@ -16,7 +17,7 @@ class _AppLayoutState extends State<AppLayout> {
   final _pages = [
     const Center(child: Text('Home Page')),
     null,
-    const Center(child: Text('Inventory Page')),
+    const InventoryListScreen(),
   ];
 
   @override
@@ -29,7 +30,6 @@ class _AppLayoutState extends State<AppLayout> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome'),
         actions: [
           IconButton(
             onPressed: () {

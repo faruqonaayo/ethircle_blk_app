@@ -1,34 +1,13 @@
 import 'package:flutter/material.dart';
 
 enum InventoryUse {
-  personal,
-  business,
-  education,
-  others;
+  personal("Personal", Colors.blue),
+  business("Business", Colors.green),
+  education("Education", Colors.orange),
+  others("Others", Colors.deepPurple);
 
-  Color get color {
-    switch (this) {
-      case InventoryUse.personal:
-        return Colors.blue;
-      case InventoryUse.business:
-        return Colors.green;
-      case InventoryUse.education:
-        return Colors.orange;
-      case InventoryUse.others:
-        return Colors.deepPurple;
-    }
-  }
+  const InventoryUse(this.displayName, this.displayColor);
 
-  String get name {
-    switch (this) {
-      case InventoryUse.personal:
-        return 'Personal';
-      case InventoryUse.business:
-        return 'Business';
-      case InventoryUse.education:
-        return 'Education';
-      case InventoryUse.others:
-        return 'Others';
-    }
-  }
+  final String displayName;
+  final Color displayColor;
 }

@@ -20,7 +20,7 @@ class InventoryServices {
         use: inventory.use,
       );
 
-      return {"status": "success", "inventory": newInventory};
+      return {"status": "success", "data": newInventory};
     } catch (e) {
       return {"status": "error", "message": e.toString()};
     }

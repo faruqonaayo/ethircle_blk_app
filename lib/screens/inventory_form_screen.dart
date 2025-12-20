@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:ethircle_blk_app/models/inventory_use.dart';
+import 'package:ethircle_blk_app/providers/inventory_provider.dart';
 import 'package:ethircle_blk_app/models/inventory.dart';
 import 'package:ethircle_blk_app/services/inventory_services.dart';
 import 'package:ethircle_blk_app/theme.dart';
 import 'package:ethircle_blk_app/widgets/input_field.dart';
 
-class InventoryFormScreen extends StatefulWidget {
+class InventoryFormScreen extends ConsumerStatefulWidget {
   const InventoryFormScreen({super.key});
 
   @override
-  State<InventoryFormScreen> createState() => _InventoryFormScreenState();
+  ConsumerState<InventoryFormScreen> createState() =>
+      _InventoryFormScreenState();
 }
 
-class _InventoryFormScreenState extends State<InventoryFormScreen> {
+class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
   final _formKey = GlobalKey<FormState>();
   var _enteredName = '';
   var _enteredDescription = '';
@@ -31,7 +34,7 @@ class _InventoryFormScreenState extends State<InventoryFormScreen> {
     final newInventory = Inventory(
       name: _enteredName,
       description: _enteredDescription,
-      use: _selectedUse.name,
+      use: _selectedUse.displayName,
     );
 
     final response = await InventoryServices.addInventory(newInventory);
@@ -41,6 +44,10 @@ class _InventoryFormScreenState extends State<InventoryFormScreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Inventory added successfully!')));
+
+      final inventoryProviderNotifier = ref.read(inventoryProvider.notifier);
+      inventoryProviderNotifier.addInventory(response['data'] as Inventory);
+
       Navigator.of(context).pop();
     } else {
       final errorMessage = response['message'] ?? 'An error occurred.';
@@ -144,7 +151,9 @@ class _InventoryFormScreenState extends State<InventoryFormScreen> {
 
   List<DropdownMenuItem> _buildDropdownItems() {
     return InventoryUse.values
-        .map((use) => DropdownMenuItem(value: use, child: Text(use.name)))
+        .map(
+          (use) => DropdownMenuItem(value: use, child: Text(use.displayName)),
+        )
         .toList();
   }
 }
