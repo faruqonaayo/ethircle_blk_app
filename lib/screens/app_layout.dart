@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ethircle_blk_app/widgets/add_options.dart';
-import 'package:ethircle_blk_app/screens/auth_screen.dart';
-import 'package:ethircle_blk_app/widgets/loading.dart';
 
 class AppLayout extends StatefulWidget {
   const AppLayout({super.key});
@@ -23,18 +21,7 @@ class _AppLayoutState extends State<AppLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (ctx, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Loading();
-        } else if (snapshot.hasData) {
-          return _buildAppLayout();
-        } else {
-          return AuthScreen();
-        }
-      },
-    );
+    return _buildAppLayout();
   }
 
   Widget _buildAppLayout() {

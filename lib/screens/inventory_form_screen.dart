@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:ethircle_blk_app/models/inventory_use.dart';
+import 'package:ethircle_blk_app/models/inventory.dart';
+import 'package:ethircle_blk_app/services/inventory_services.dart';
 import 'package:ethircle_blk_app/theme.dart';
 import 'package:ethircle_blk_app/widgets/input_field.dart';
 
@@ -12,6 +14,42 @@ class InventoryFormScreen extends StatefulWidget {
 }
 
 class _InventoryFormScreenState extends State<InventoryFormScreen> {
+  final _formKey = GlobalKey<FormState>();
+  var _enteredName = '';
+  var _enteredDescription = '';
+  var _selectedUse = InventoryUse.values.first;
+
+  void _trySubmit() async {
+    final isValid = _formKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+
+    _formKey.currentState?.save();
+
+    // saving new inventory logic here
+    final newInventory = Inventory(
+      name: _enteredName,
+      description: _enteredDescription,
+      use: _selectedUse.name,
+    );
+
+    final response = await InventoryServices.addInventory(newInventory);
+    if (!mounted) return;
+
+    if (response['status'] == 'success') {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Inventory added successfully!')));
+      Navigator.of(context).pop();
+    } else {
+      final errorMessage = response['message'] ?? 'An error occurred.';
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(errorMessage)));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,26 +65,45 @@ class _InventoryFormScreenState extends State<InventoryFormScreen> {
           ),
           SizedBox(height: 32),
           Form(
+            key: _formKey,
             child: Column(
               spacing: 16,
               children: [
                 InputField(
                   labelText: "Name",
                   hintText: "Enter inventory name",
-                  validatorFn: (value) {},
-                  saveFn: (value) {},
+                  validatorFn: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter inventory name.';
+                    }
+                    return null;
+                  },
+                  saveFn: (value) {
+                    _enteredName = value!;
+                  },
                 ),
                 InputField(
                   labelText: "Description",
                   hintText: "Enter inventory description",
-                  validatorFn: (value) {},
-                  saveFn: (value) {},
+                  validatorFn: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter inventory description.';
+                    }
+                    return null;
+                  },
+                  saveFn: (value) {
+                    _enteredDescription = value!;
+                  },
                   maxLines: 4,
                 ),
                 DropdownButtonFormField(
-                  initialValue: InventoryUse.values.first,
+                  initialValue: _selectedUse,
                   items: _buildDropdownItems(),
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedUse = value as InventoryUse;
+                    });
+                  },
                   decoration: InputDecoration(
                     labelText: "Inventory Use",
                     border: OutlineInputBorder(
@@ -65,12 +122,15 @@ class _InventoryFormScreenState extends State<InventoryFormScreen> {
                     ).colorScheme.surfaceContainerHigh,
                     filled: true,
                   ),
+                  dropdownColor: Theme.of(context).colorScheme.surfaceContainer,
                 ),
                 SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _trySubmit();
+                    },
                     child: Text('Save Inventory'),
                   ),
                 ),
