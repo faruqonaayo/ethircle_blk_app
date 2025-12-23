@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:ethircle_blk_app/services/inventory_services.dart';
+import 'package:ethircle_blk_app/widgets/confirm_delete.dart';
 import 'package:ethircle_blk_app/models/inventory.dart';
 import 'package:ethircle_blk_app/theme.dart';
 import 'package:ethircle_blk_app/providers/inventory_provider.dart';
@@ -21,13 +24,45 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
   @override
   Widget build(BuildContext context) {
     final inventories = ref.watch(inventoryProvider);
+    final inventoryNotifier = ref.read(inventoryProvider.notifier);
 
     final inventory = inventories.firstWhere(
       (inv) => inv.id == widget.inventoryId,
+      orElse: () => Inventory(
+        name: 'Unknown',
+        description: 'No description available.',
+        use: 'N/A',
+        userId: '',
+      ),
     );
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: Text(inventory.name)),
+      appBar: AppBar(
+        title: Text(inventory.name),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.edit, color: colorScheme.onSurfaceVariant),
+          ),
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => ConfirmDelete(
+                  onConfirm: () {
+                    // Delete inventory logic here
+                    InventoryServices.deleteInventory(inventory.id!);
+                    inventoryNotifier.deleteInventory(inventory.id!);
+                    context.pop();
+                  },
+                  name: inventory.name,
+                ),
+              );
+            },
+            icon: Icon(Icons.delete, color: colorScheme.onSurfaceVariant),
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
 
