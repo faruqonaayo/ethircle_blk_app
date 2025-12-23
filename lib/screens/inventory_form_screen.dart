@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,6 +36,7 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
       name: _enteredName,
       description: _enteredDescription,
       use: _selectedUse.displayName,
+      userId: FirebaseAuth.instance.currentUser!.uid,
     );
 
     final response = await InventoryServices.addInventory(newInventory);

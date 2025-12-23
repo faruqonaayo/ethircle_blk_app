@@ -11,6 +11,7 @@ class InventoryServices {
             'name': inventory.name,
             'description': inventory.description,
             'use': inventory.use,
+            'userId': inventory.userId,
           });
 
       final newInventory = Inventory(
@@ -18,6 +19,7 @@ class InventoryServices {
         name: inventory.name,
         description: inventory.description,
         use: inventory.use,
+        userId: inventory.userId,
       );
 
       return {"status": "success", "data": newInventory};
