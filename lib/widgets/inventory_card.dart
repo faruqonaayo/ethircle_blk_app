@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:ethircle_blk_app/models/inventory.dart';
 import 'package:ethircle_blk_app/models/inventory_use.dart';
@@ -18,7 +19,7 @@ class InventoryCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        // Handle card tap if needed
+        context.push('/inventory/${inventory.id}');
       },
       child: Card(
         color: colorScheme.surfaceContainerLowest,

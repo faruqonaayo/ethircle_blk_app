@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+import 'package:ethircle_blk_app/screens/inventory_screen.dart';
 import 'package:ethircle_blk_app/screens/auth_screen.dart';
 import 'package:ethircle_blk_app/screens/inventory_form_screen.dart';
 import 'package:ethircle_blk_app/screens/app_layout.dart';
@@ -27,6 +28,13 @@ class BlkApp extends StatelessWidget {
       GoRoute(
         path: '/inventory/new',
         builder: (ctx, state) => InventoryFormScreen(),
+      ),
+      GoRoute(
+        path: '/inventory/:id',
+        builder: (ctx, state) {
+          final inventoryId = state.pathParameters['id']!;
+          return InventoryScreen(inventoryId);
+        },
       ),
     ],
   );
