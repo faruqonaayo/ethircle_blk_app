@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:ethircle_blk_app/providers/item_provider.dart';
 import 'package:ethircle_blk_app/services/inventory_services.dart';
 import 'package:ethircle_blk_app/widgets/confirm_delete.dart';
 import 'package:ethircle_blk_app/models/inventory.dart';
@@ -99,7 +100,23 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
   }
 
   Widget _buildItemsTab() {
-    return Center(child: Text('Items Tab Content'));
+    final items = ref.watch(itemProvider);
+    final invItems = items
+        .where((item) => item.inventoryId == widget.inventoryId)
+        .toList();
+
+    if (invItems.isEmpty) {
+      return Center(child: const Text('No items in this inventory'));
+    }
+    return ListView.builder(
+      primary: false,
+      shrinkWrap: true,
+      itemCount: invItems.length,
+      itemBuilder: (ctx, index) {
+        final item = invItems[index];
+        return Text(item.name);
+      },
+    );
   }
 
   Widget _buildDetailsTab(Inventory inventory) {
