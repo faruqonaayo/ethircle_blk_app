@@ -1,3 +1,5 @@
+import 'package:ethircle_blk_app/providers/inventory_provider.dart';
+import 'package:ethircle_blk_app/providers/item_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,6 +48,11 @@ class _AppLayoutState extends ConsumerState<AppLayout> {
           IconButton(
             onPressed: () {
               FirebaseAuth.instance.signOut();
+
+              // invalidating providers in order to reset app wide state
+              ref.invalidate(inventoryProvider);
+              ref.invalidate(appDataProvider);
+              ref.invalidate(itemProvider);
             },
             icon: Icon(Icons.logout),
           ),
