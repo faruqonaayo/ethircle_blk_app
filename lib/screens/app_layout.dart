@@ -1,17 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ethircle_blk_app/providers/app_data_provider.dart';
+import 'package:ethircle_blk_app/widgets/loading.dart';
 import 'package:ethircle_blk_app/screens/inventory_list_screen.dart';
 import 'package:ethircle_blk_app/widgets/add_options.dart';
 
-class AppLayout extends StatefulWidget {
+class AppLayout extends ConsumerStatefulWidget {
   const AppLayout({super.key});
 
   @override
-  State<AppLayout> createState() => _AppLayoutState();
+  ConsumerState<AppLayout> createState() => _AppLayoutState();
 }
 
-class _AppLayoutState extends State<AppLayout> {
+class _AppLayoutState extends ConsumerState<AppLayout> {
+  late Future<void> _loadAppData;
   var _currentPage = 0;
 
   final _pages = [
@@ -19,6 +23,14 @@ class _AppLayoutState extends State<AppLayout> {
     null,
     const InventoryListScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    if (FirebaseAuth.instance.currentUser != null) {
+      _loadAppData = ref.read(appDataProvider);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +51,15 @@ class _AppLayoutState extends State<AppLayout> {
           ),
         ],
       ),
-      body: _pages[_currentPage],
+      body: FutureBuilder(
+        future: _loadAppData,
+        builder: (context, asyncSnapshot) {
+          if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+            return Loading();
+          }
+          return _pages[_currentPage]!;
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentPage,
