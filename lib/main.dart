@@ -36,6 +36,13 @@ class BlkApp extends StatelessWidget {
           return InventoryScreen(inventoryId);
         },
       ),
+      GoRoute(
+        path: "/inventory/edit/:id",
+        builder: (ctx, state) {
+          final inventoryId = state.pathParameters['id']!;
+          return InventoryFormScreen(inventoryId: inventoryId);
+        },
+      )
     ],
   );
 

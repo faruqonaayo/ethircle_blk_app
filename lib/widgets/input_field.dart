@@ -9,6 +9,7 @@ class InputField extends StatelessWidget {
     required this.validatorFn,
     required this.saveFn,
     this.maxLines = 1,
+    this.initialValue,
   });
 
   final String labelText;
@@ -17,11 +18,13 @@ class InputField extends StatelessWidget {
   final String? Function(String? value) validatorFn;
   final void Function(String? value) saveFn;
   final int maxLines;
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return TextFormField(
+      initialValue: initialValue,
       obscureText: obscureText,
       decoration: InputDecoration(
         labelText: labelText,

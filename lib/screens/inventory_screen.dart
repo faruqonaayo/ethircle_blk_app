@@ -41,7 +41,9 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
         title: Text(inventory.name),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.push('/inventory/edit/${inventory.id}');
+            },
             icon: Icon(Icons.edit, color: colorScheme.onSurfaceVariant),
           ),
           IconButton(

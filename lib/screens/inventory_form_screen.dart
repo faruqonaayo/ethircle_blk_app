@@ -10,7 +10,9 @@ import 'package:ethircle_blk_app/theme.dart';
 import 'package:ethircle_blk_app/widgets/input_field.dart';
 
 class InventoryFormScreen extends ConsumerStatefulWidget {
-  const InventoryFormScreen({super.key});
+  const InventoryFormScreen({super.key, this.inventoryId});
+
+  final String? inventoryId;
 
   @override
   ConsumerState<InventoryFormScreen> createState() =>
@@ -23,39 +25,21 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
   var _enteredDescription = '';
   var _selectedUse = InventoryUse.values.first;
 
-  void _trySubmit() async {
-    final isValid = _formKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
+  @override
+  void initState() {
+    super.initState();
 
-    _formKey.currentState?.save();
-
-    // saving new inventory logic here
-    final newInventory = Inventory(
-      name: _enteredName,
-      description: _enteredDescription,
-      use: _selectedUse.displayName,
-      userId: FirebaseAuth.instance.currentUser!.uid,
-    );
-
-    final response = await InventoryServices.addInventory(newInventory);
-    if (!mounted) return;
-
-    if (response['status'] == 'success') {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Inventory added successfully!')));
-
-      final inventoryProviderNotifier = ref.read(inventoryProvider.notifier);
-      inventoryProviderNotifier.addInventory(response['data'] as Inventory);
-
-      Navigator.of(context).pop();
-    } else {
-      final errorMessage = response['message'] ?? 'An error occurred.';
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(errorMessage)));
+    // fetch existing inventory data if editing
+    if (widget.inventoryId != null) {
+      final inventory = ref
+          .read(inventoryProvider)
+          .firstWhere((inv) => inv.id == widget.inventoryId);
+      _enteredName = inventory.name;
+      _enteredDescription = inventory.description;
+      _selectedUse = InventoryUse.values.firstWhere(
+        (use) => use.displayName == inventory.use,
+        orElse: () => InventoryUse.values.first,
+      );
     }
   }
 
@@ -79,6 +63,7 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
               spacing: 16,
               children: [
                 InputField(
+                  initialValue: _enteredName,
                   labelText: "Name",
                   hintText: "Enter inventory name",
                   validatorFn: (value) {
@@ -92,6 +77,7 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
                   },
                 ),
                 InputField(
+                  initialValue: _enteredDescription,
                   labelText: "Description",
                   hintText: "Enter inventory description",
                   validatorFn: (value) {
@@ -157,5 +143,67 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
           (use) => DropdownMenuItem(value: use, child: Text(use.displayName)),
         )
         .toList();
+  }
+
+  void _trySubmit() async {
+    final isValid = _formKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+
+    _formKey.currentState?.save();
+
+    // saving new inventory logic here
+    final newInventory = Inventory(
+      name: _enteredName,
+      description: _enteredDescription,
+      use: _selectedUse.displayName,
+      userId: FirebaseAuth.instance.currentUser!.uid,
+    );
+
+    // logic to add or update inventory
+    late final Map<String, dynamic> response;
+    if (widget.inventoryId != null) {
+      final updatedInventory = Inventory(
+        id: widget.inventoryId,
+        name: _enteredName,
+        description: _enteredDescription,
+        use: _selectedUse.displayName,
+        userId: FirebaseAuth.instance.currentUser!.uid,
+      );
+      response = await InventoryServices.updateInventory(updatedInventory);
+    } else {
+      response = await InventoryServices.addInventory(newInventory);
+    }
+
+    if (!mounted) return;
+
+    if (response['status'] == 'success') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            widget.inventoryId != null
+                ? 'Inventory updated successfully!'
+                : 'Inventory added successfully!',
+          ),
+        ),
+      );
+
+      final inventoryProviderNotifier = ref.read(inventoryProvider.notifier);
+      if (widget.inventoryId != null) {
+        inventoryProviderNotifier.updateInventory(
+          response['data'] as Inventory,
+        );
+      } else {
+        inventoryProviderNotifier.addInventory(response['data'] as Inventory);
+      }
+
+      Navigator.of(context).pop();
+    } else {
+      final errorMessage = response['message'] ?? 'An error occurred.';
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(errorMessage)));
+    }
   }
 }

@@ -28,7 +28,27 @@ class InventoryServices {
     }
   }
 
-  static Future<Map<String, dynamic>> deleteInventory(String inventoryId) async {
+  static Future<Map<String, dynamic>> updateInventory(
+    Inventory inventory,
+  ) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("inventories")
+          .doc(inventory.id)
+          .update({
+            'name': inventory.name,
+            'description': inventory.description,
+            'use': inventory.use,
+          });
+      return {"status": "success", "data": inventory};
+    } catch (e) {
+      return {"status": "error", "message": e.toString()};
+    }
+  }
+
+  static Future<Map<String, dynamic>> deleteInventory(
+    String inventoryId,
+  ) async {
     try {
       await FirebaseFirestore.instance
           .collection("inventories")

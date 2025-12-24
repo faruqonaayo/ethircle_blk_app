@@ -11,6 +11,8 @@ class InventoryNotifier extends Notifier<List<Inventory>> {
   }
 
   Future<void> loadInventories() async {
+    // optimiztion: avoid fetching if already loaded
+    if (state.isNotEmpty) return;
     // fetch inventories from a data source
     final db = FirebaseFirestore.instance;
     final uid = FirebaseAuth.instance.currentUser!.uid;
@@ -36,6 +38,15 @@ class InventoryNotifier extends Notifier<List<Inventory>> {
 
   void addInventory(Inventory inventory) {
     state = [...state, inventory];
+  }
+
+  void updateInventory(Inventory updatedInventory) {
+    state = state.map((inv) {
+      if (inv.id == updatedInventory.id) {
+        return updatedInventory;
+      }
+      return inv;
+    }).toList();
   }
 
   void deleteInventory(String inventoryId) {
