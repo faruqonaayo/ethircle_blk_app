@@ -10,6 +10,7 @@ class InputField extends StatelessWidget {
     required this.saveFn,
     this.maxLines = 1,
     this.initialValue,
+    this.keyboardType = TextInputType.text,
   });
 
   final String labelText;
@@ -19,6 +20,7 @@ class InputField extends StatelessWidget {
   final void Function(String? value) saveFn;
   final int maxLines;
   final String? initialValue;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class InputField extends StatelessWidget {
     return TextFormField(
       initialValue: initialValue,
       obscureText: obscureText,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,

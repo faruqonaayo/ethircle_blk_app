@@ -21,8 +21,8 @@ class AddOptions extends StatelessWidget {
             style: title3Style.copyWith(fontSize: 16),
           ),
           _buildOptionTile(context, 'Add Item', Icons.emoji_objects, () {
-            // Handle add item action
             Navigator.of(context).pop();
+            context.push("/item/new");
           }),
           _buildOptionTile(context, 'Add Inventory', Icons.inventory, () {
             Navigator.of(context).pop();
