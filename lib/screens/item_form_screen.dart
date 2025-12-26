@@ -23,6 +23,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   var _enteredName = '';
   var _enteredDescription = '';
   var _enteredPrice = 0.0;
+  var _enteredQuantity = 0.0;
   Inventory? _selectedInventory;
   MeasureUnit _selectedMeasureUnit = MeasureUnit.values.first;
 
@@ -93,7 +94,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                   },
                 ),
                 InputField(
-                  initialValue: _enteredPrice.toString(),
+                  initialValue: _enteredQuantity.toString(),
                   labelText: "Quantity",
                   hintText: "Enter item quantity",
                   keyboardType: TextInputType.number,
@@ -107,7 +108,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                     return null;
                   },
                   saveFn: (value) {
-                    _enteredPrice = double.parse(value!);
+                    _enteredQuantity = double.parse(value!);
                   },
                 ),
                 DropdownButtonFormField(
@@ -215,6 +216,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       name: _enteredName,
       description: _enteredDescription,
       price: _enteredPrice,
+      quantity: _enteredQuantity,
       measureUnit: _selectedMeasureUnit.displayName,
       inventoryId: _selectedInventory?.id ?? '',
       userId: FirebaseAuth.instance.currentUser!.uid,

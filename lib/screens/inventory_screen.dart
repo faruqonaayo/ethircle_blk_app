@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:ethircle_blk_app/models/inventory_use.dart';
+import 'package:ethircle_blk_app/widgets/item_card.dart';
 import 'package:ethircle_blk_app/providers/item_provider.dart';
 import 'package:ethircle_blk_app/services/inventory_services.dart';
 import 'package:ethircle_blk_app/widgets/confirm_delete.dart';
@@ -92,29 +94,42 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
           ),
           const SizedBox(height: 24),
           _selectedTab == 'Items'
-              ? _buildItemsTab()
+              ? _buildItemsTab(inventory)
               : _buildDetailsTab(inventory),
         ],
       ),
     );
   }
 
-  Widget _buildItemsTab() {
+  Widget _buildItemsTab(Inventory inventory) {
     final items = ref.watch(itemProvider);
     final invItems = items
         .where((item) => item.inventoryId == widget.inventoryId)
         .toList();
 
+    final inventoryColor = InventoryUse.values
+        .firstWhere(
+          (use) => use.displayName == inventory.use,
+          orElse: () => InventoryUse.others,
+        )
+        .displayColor;
+
     if (invItems.isEmpty) {
       return Center(child: const Text('No items in this inventory'));
     }
-    return ListView.builder(
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        childAspectRatio: 2 / 1,
+      ),
       primary: false,
       shrinkWrap: true,
       itemCount: invItems.length,
       itemBuilder: (ctx, index) {
         final item = invItems[index];
-        return Text(item.name);
+        return ItemCard(item, cardColor: inventoryColor);
       },
     );
   }

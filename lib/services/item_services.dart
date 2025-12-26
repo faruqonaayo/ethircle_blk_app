@@ -9,6 +9,7 @@ class ItemServices {
         'name': item.name,
         'description': item.description,
         'price': item.price,
+        'quantity': item.quantity,
         'measureUnit': item.measureUnit,
         'inventoryId': item.inventoryId,
         'userId': item.userId,

@@ -4,6 +4,7 @@ class Item {
     required this.name,
     required this.description,
     required this.price,
+    required this.quantity,
     required this.measureUnit,
     required this.inventoryId,
     required this.userId,
@@ -13,6 +14,7 @@ class Item {
   final String name;
   final String description;
   final double price;
+  final double quantity;
   final String measureUnit;
   final String inventoryId;
   final String userId;

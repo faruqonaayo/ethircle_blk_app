@@ -30,6 +30,7 @@ class ItemNotifier extends Notifier<List<Item>> {
             name: doc["name"],
             description: doc["description"],
             price: doc["price"],
+            quantity: doc["quantity"],
             measureUnit: doc["measureUnit"],
             inventoryId: doc["inventoryId"],
             userId: doc["userId"],
