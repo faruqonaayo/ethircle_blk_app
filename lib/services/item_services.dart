@@ -20,4 +20,14 @@ class ItemServices {
       return {"status": "error", "message": e.toString()};
     }
   }
+
+  static Future<Map<String, dynamic>> deleteItem(String itemId) async {
+    try {
+      await FirebaseFirestore.instance.collection("items").doc(itemId).delete();
+
+      return {"status": "success"};
+    } catch (e) {
+      return {"status": "error", "message": e.toString()};
+    }
+  }
 }

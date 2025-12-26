@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:ethircle_blk_app/models/item.dart';
 import 'package:ethircle_blk_app/theme.dart';
@@ -14,6 +15,7 @@ class ItemCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Handle item tap if needed
+        context.push('/item/${item.id}');
       },
       child: Card(
         elevation: 1,
@@ -28,7 +30,7 @@ class ItemCard extends StatelessWidget {
                 left: 8,
                 child: Text(
                   item.name,
-                  style: title3Style.copyWith(letterSpacing: 1),
+                  style: title4Style.copyWith(letterSpacing: 1),
                 ),
               ),
               Positioned(
@@ -36,7 +38,7 @@ class ItemCard extends StatelessWidget {
                 left: 8,
                 child: Text(
                   'Qty: ${item.quantity}',
-                  style: TextStyle(fontSize: 14),
+                  style: TextStyle(fontSize: 12, color: Colors.grey[800]),
                 ),
               ),
 

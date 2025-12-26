@@ -7,6 +7,7 @@ import 'firebase_options.dart';
 
 import 'package:ethircle_blk_app/screens/item_form_screen.dart';
 import 'package:ethircle_blk_app/screens/inventory_screen.dart';
+import 'package:ethircle_blk_app/screens/item_screen.dart';
 import 'package:ethircle_blk_app/screens/auth_screen.dart';
 import 'package:ethircle_blk_app/screens/inventory_form_screen.dart';
 import 'package:ethircle_blk_app/screens/app_layout.dart';
@@ -48,6 +49,13 @@ class BlkApp extends StatelessWidget {
         path: "/item/new",
         builder: (ctx, state) {
           return ItemFormScreen();
+        },
+      ),
+      GoRoute(
+        path: "/item/:id",
+        builder: (ctx, state) {
+          final itemId = state.pathParameters['id']!;
+          return ItemScreen(itemId);
         },
       ),
     ],

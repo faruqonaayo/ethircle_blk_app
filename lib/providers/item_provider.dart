@@ -42,6 +42,10 @@ class ItemNotifier extends Notifier<List<Item>> {
   void addItem(Item item) {
     state = [...state, item];
   }
+
+  void deleteItem(String itemId) {
+    state = state.where((item) => item.id != itemId).toList();
+  }
 }
 
 final itemProvider = NotifierProvider<ItemNotifier, List<Item>>(

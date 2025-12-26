@@ -34,28 +34,28 @@ ThemeData getThemeData(ColorScheme cs) {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: cs.primary,
-        textStyle: GoogleFonts.poppins(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-        ),
+        textStyle: GoogleFonts.lato(fontSize: 14, fontWeight: FontWeight.w500),
       ),
     ),
   );
 }
 
-final title1Style = GoogleFonts.lato(fontSize: 24, fontWeight: FontWeight.bold);
+final title1Style = GoogleFonts.raleway(
+  fontSize: 24,
+  fontWeight: FontWeight.bold,
+);
 
-final title2Style = GoogleFonts.poppins(
+final title2Style = GoogleFonts.raleway(
   fontSize: 20,
   fontWeight: FontWeight.w600,
 );
 
-final title3Style = GoogleFonts.poppins(
+final title3Style = GoogleFonts.raleway(
   fontSize: 18,
   fontWeight: FontWeight.w500,
 );
 
-final title4Style = GoogleFonts.poppins(
+final title4Style = GoogleFonts.raleway(
   fontSize: 16,
   fontWeight: FontWeight.w500,
 );
